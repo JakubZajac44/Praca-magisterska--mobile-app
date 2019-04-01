@@ -1,0 +1,33 @@
+<resources>
+    <string name="title_location_permission">Uprawnienia lokalizacji</string>
+    <string name="text_location_permission">Aplikacja do działania potrzebuje uprawnień gps, tak aby poprawnie mogła wspomagać Twój trening.</string>
+    <string name="ok">Ok</string>
+
+    <string name="app_name">ArApp</string>
+    <string name="azimuth_text">Azymut:</string>
+    <string name="pitch_text">Pułap:</string>
+    <string name="ble_not_supported">Bluetooth LE not suported</string>
+    <string name="ar_navigation_title">Widok AR</string>
+    <string name="ble_navigation_title">Scanner</string>
+    <string name="list_navigation_title">Saved Device</string>
+    <string name="ble_device_scanning_title">Dostępne urządzenia</string>
+    <string name="scanning_button_name">Skanuj</string>
+    <string name="saving_connecting_button_name">Zapisz i połącz się</string>
+    <string name="yes">Tak</string>
+    <string name="no">Nie</string>
+    <string name="deleteFromDbDialogTitle">Czy na pewno chcesz usunąć zapisane urządzenie?</string>
+    <string name="permission_not_granted">Nie przyznano odpowiednich uprawnien</string>
+
+
+    <string name="channel_name">Ardroid</string>
+    <string name="channel_description">Ardroid</string>
+    <string name="notification_title">Aplikacja dziala w tle</string>
+    <string name="notification_text">Dotknij aby otworzyć aplikacje</string>
+
+
+    <string name="markerListTextView">Lista znacznikow</string>
+    <string name="seekBarStatusActive">Promien obszaru wynosi:</string>
+    <string name="seekBarStatusNonactive">Dotknij mape, aby wybrac miejsce obszaru</string>
+    <string name="sample_text">Odczyt</string>
+    <string name="time_sample_text">data</string>
+</resources>

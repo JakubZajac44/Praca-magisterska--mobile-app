@@ -1,0 +1,44 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:weightSum="10"
+    android:padding="5dp">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="9"
+        android:orientation="vertical"
+        android:weightSum="5">
+
+
+        <TextView
+            android:id="@+id/bleDeviceItemName"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            android:textSize="20dp"/>
+
+        <TextView
+            android:id="@+id/bleDeviceItemAddress"
+            android:layout_weight="2"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:textSize="20dp"/>
+
+    </LinearLayout>
+
+
+
+    <CheckBox
+        android:id="@+id/bleDeviceItemCheckBox"
+        android:width="0dp"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:clickable="false"
+        android:focusable="false"/>
+
+
+</LinearLayout>
