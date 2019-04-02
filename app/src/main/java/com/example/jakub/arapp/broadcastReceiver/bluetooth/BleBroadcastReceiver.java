@@ -52,7 +52,9 @@ public class BleBroadcastReceiver extends BroadcastReceiver {
                 break;
             case ConnectedBleDeviceProvider.ACTION_NEW_DATA_AVAILABLE:
                 String data = intent.getStringExtra(ConnectedBleDeviceProvider.NEW_DATA_KEY);
+                this.changeBleDeviceData(address,data);
                 logger.log(TAG,"Device: "+address+", value: "+data);
+
                 break;
         }
     }
@@ -68,7 +70,13 @@ public class BleBroadcastReceiver extends BroadcastReceiver {
 
     public void changeConnectionStatus(String address, int status){
         if(listener!=null){
-            listener.changeDeviceConnectionStatus(address,status);
+            listener.changeBleDeviceConnectionStatus(address,status);
+        }
+    }
+
+    public void changeBleDeviceData(String address, String data){
+        if(listener!=null){
+            listener.changeBleDeviceData(address,data);
         }
     }
 }

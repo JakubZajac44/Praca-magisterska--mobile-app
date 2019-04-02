@@ -230,7 +230,7 @@ public class MainArPresenter implements MainArContract.Presenter, BleConnectionL
 
     // Ble device listener
     @Override
-    public void changeDeviceConnectionStatus(String address, int status) {
+    public void changeBleDeviceConnectionStatus(String address, int status) {
         logger.log(TAG, "Address: " + address + ", status: " + String.valueOf(status));
         for (IoTDevice ioTDevice : ioTDeviceList) {
             if (ioTDevice instanceof BleDeviceWrapper) {
@@ -243,8 +243,14 @@ public class MainArPresenter implements MainArContract.Presenter, BleConnectionL
     }
 
     @Override
-    public void changeDeviceData(String address, String data) {
-        // TODO tutaj zmienic w widoku odczyt sensorów
+    public void changeBleDeviceData(String address, String data) {
+        for (IoTDevice ioTDevice : ioTDeviceList) {
+            if (ioTDevice instanceof BleDeviceWrapper) {
+                if (((BleDeviceWrapper) ioTDevice).getAddress().equals(address))
+                    ioTDevice.setSample(data);
+            }
+        }
+        view.notifyDataChanged();
     }
 
     // Internet device listener

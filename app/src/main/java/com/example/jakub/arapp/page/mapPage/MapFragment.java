@@ -168,6 +168,8 @@ public class MapFragment extends Fragment implements MapContract.View, OnMapRead
         this.renderCircle();
     }
 
+
+
     private void renderCircle() {
         if (circle != null) circle.remove();
         this.drawCircle();
@@ -284,4 +286,7 @@ public class MapFragment extends Fragment implements MapContract.View, OnMapRead
         presenter.detachView();
         super.onDestroy();
     }
+
+
+
 }
