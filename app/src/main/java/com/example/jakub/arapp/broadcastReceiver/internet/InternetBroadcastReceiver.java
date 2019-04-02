@@ -43,11 +43,11 @@ public class InternetBroadcastReceiver extends BroadcastReceiver {
             case BackendConnectionProvider.ACTION_INTERNET_DEVICE_LOADED:
                 List<InternetDeviceWrapper> internetDeviceWrapperList=  intent.getParcelableArrayListExtra(BackendConnectionProvider.KEY_INTERNET_DEVICE_LOADED);
                 logger.log(TAG,"Internet device loaded: "+String.valueOf(internetDeviceWrapperList.size()));
-                if(listener!=null)listener.internetDeviceLoaded(internetDeviceWrapperList);
+                if(listener!=null)listener.internetDeviceLoadedReceive(internetDeviceWrapperList);
                 break;
             case BackendConnectionProvider.ACTION_INTERNET_DEVICE_ERROR:
                 String message = intent.getStringExtra(BackendConnectionProvider.KEY_INTERNET_DEVICE_ERROR);
-                if(listener!=null)listener.internetDeviceLoadedError(message);
+                if(listener!=null)listener.internetDeviceLoadedErrorReceive(message);
                 break;
         }
 

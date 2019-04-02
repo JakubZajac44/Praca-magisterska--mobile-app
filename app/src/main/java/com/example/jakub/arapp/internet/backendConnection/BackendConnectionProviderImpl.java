@@ -29,7 +29,7 @@ public class BackendConnectionProviderImpl implements BackendConnectionProvider 
     @Inject
     Retrofit retrofit;
 
-    private InternetConnectionListener listener;
+    private BackendConnectionListener listener;
 
 
     @Inject
@@ -58,7 +58,7 @@ public class BackendConnectionProviderImpl implements BackendConnectionProvider 
     }
 
     @Override
-    public void setUpListener(InternetConnectionListener listener) {
+    public void setUpListener(BackendConnectionListener listener) {
         this.listener = listener;
     }
 

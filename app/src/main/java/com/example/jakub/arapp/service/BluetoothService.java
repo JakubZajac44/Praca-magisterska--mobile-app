@@ -19,6 +19,7 @@ import com.example.jakub.arapp.broadcastReceiver.internet.InternetConnectionList
 import com.example.jakub.arapp.dataBase.data.ble.BleDevice;
 import com.example.jakub.arapp.dataBase.repository.ble.BleDeviceRepository;
 import com.example.jakub.arapp.gps.GpsProvider;
+import com.example.jakub.arapp.internet.backendConnection.BackendConnectionListener;
 import com.example.jakub.arapp.internet.backendConnection.BackendConnectionProvider;
 import com.example.jakub.arapp.model.device.InternetDeviceWrapper;
 import com.example.jakub.arapp.notification.NotificationProvider;
@@ -43,12 +44,14 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 
-public class BluetoothService extends Service implements InternetConnectionListener {
+public class BluetoothService extends Service
+        implements BackendConnectionListener
+{
 
     private final BluetoothServiceBinder binder = new BluetoothServiceBinder();
     private final String TAG = BluetoothService.class.getSimpleName();
     private final int INTERVAL_TIME = 10000;
-    private final int DELAY_TIME = 2000;
+    private final int DELAY_TIME = 1000;
 
     @Inject
     public Logger logger;

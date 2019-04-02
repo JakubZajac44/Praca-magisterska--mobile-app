@@ -95,7 +95,7 @@ public class MapFragment extends Fragment implements MapContract.View, OnMapRead
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.map_fragment, container, false);
+        View view = inflater.inflate(R.layout.map_panel, container, false);
         unbinder = ButterKnife.bind(this, view);
         presenter.attachView(this);
         supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);

@@ -120,7 +120,7 @@ public class MapPresenter implements MapContract.Presenter, GpsLocationListener,
     }
 
     @Override
-    public void internetDeviceLoaded(List<InternetDeviceWrapper> internetDeviceWrapperList) {
+    public void internetDeviceLoadedReceive(List<InternetDeviceWrapper> internetDeviceWrapperList) {
         allInternetDevice.clear();
         allInternetDevice.addAll(internetDeviceWrapperList);
         logger.log(TAG,"Number of Internet Device loaded: "+String.valueOf(internetDeviceWrapperList.size()));
@@ -128,7 +128,7 @@ public class MapPresenter implements MapContract.Presenter, GpsLocationListener,
     }
 
     @Override
-    public void internetDeviceLoadedError(String errorMassage) {
+    public void internetDeviceLoadedErrorReceive(String errorMassage) {
         view.showMessage(errorMassage);
         view.removeAllInternetDeviceMarker();
         allInternetDevice.clear();

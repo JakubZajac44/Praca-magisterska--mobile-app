@@ -12,7 +12,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 
-
+@Singleton
 public class ConnectedBleDeviceProviderImpl implements ConnectedBleDeviceProvider{
 
     public static final String TAG = ConnectedBleDeviceProviderImpl.class.getSimpleName();
@@ -66,7 +66,6 @@ public class ConnectedBleDeviceProviderImpl implements ConnectedBleDeviceProvide
     public int getStatus(String address){
         for(ConnectedBleDevice connectedBleDevice : connectedBleDevices){
             if(connectedBleDevice.getAddress().equals(address)){
-                logger.log(TAG, connectedBleDevice.getState());
                 return connectedBleDevice.getState();
             }
         }

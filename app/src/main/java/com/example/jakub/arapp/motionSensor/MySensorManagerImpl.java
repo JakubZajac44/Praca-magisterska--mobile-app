@@ -22,7 +22,7 @@ import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
 
 
-@Singleton
+
 public class MySensorManagerImpl implements MySensorManager, SensorEventListener {
 
     public static final String TAG = MySensorManagerImpl.class.getSimpleName();

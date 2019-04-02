@@ -20,4 +20,6 @@ public interface BleDeviceRepository {
 
     void deleteDevice(BleDevice device);
 
+    List<BleDeviceWrapper> wrapListInternetDevice(List<BleDevice> devices);
+
 }

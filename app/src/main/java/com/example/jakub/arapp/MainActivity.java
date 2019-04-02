@@ -104,6 +104,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ((MyApplication) getApplication()).getAppComponent().inject(this);
+        logger.log(TAG,"onCreate");
         unbinder = ButterKnife.bind(this);
         logger.log(TAG, "onCreate");
         listPermissionsNeeded = new ArrayList<>();
@@ -154,8 +155,15 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onStart() {
+        logger.log(TAG,"onStart");
         this.registerBroadcastReceiver();
         super.onStart();
+    }
+
+    @Override
+    protected void onResume() {
+        logger.log(TAG,"onResume");
+        super.onResume();
     }
 
     private void registerBroadcastReceiver() {
@@ -176,7 +184,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onPause() {
+        logger.log(TAG,"onPasue");
+        super.onPause();
+    }
+
+    @Override
     protected void onStop() {
+        logger.log(TAG,"onStop");
         this.unregisterBroadcastReceiver();
         super.onStop();
     }

@@ -14,16 +14,13 @@ public interface MainArContract {
         void attachView(MainArContract.View view);
         void detachView();
         void getSavedDevice();
-        void removeIotDevice(IoTDevice ioTDevice);
-
+        void removeIotDevice(int itemPosition);
     }
 
     interface View{
 
-        void upDateListViewIoTDevice(List<IoTDevice> bleDevices);
-        void upDateListViewAllDevice(String address, int status);
-        void upDateListViewAllInternetDevice(List<InternetDeviceWrapper> internetDeviceWrapperList);
-        void setAllInternetDeviceOffline();
+        void setupModel(List<IoTDevice> ioTDeviceList);
+        void notifyDataChanged();
         void showMessage(String message);
     }
 

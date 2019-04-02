@@ -5,6 +5,7 @@ import com.example.jakub.arapp.model.device.BleDeviceWrapper;
 import com.example.jakub.arapp.dataBase.data.ble.BleDevice;
 import com.example.jakub.arapp.dataBase.data.ble.BleDeviceDao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -48,6 +49,21 @@ public class BleDeviceRepositoryImpl implements BleDeviceRepository {
     @Override
     public void deleteDevice(BleDevice device) {
          bleDeviceDao.remove(device);
+    }
+
+    @Override
+    public List<BleDeviceWrapper> wrapListInternetDevice(List<BleDevice> devices) {
+        List<BleDeviceWrapper> wrappedDevices = new ArrayList<>();
+        for (BleDevice deviceWrapper : devices) {
+            BleDeviceWrapper device = this.wrapInternetDevice(deviceWrapper);
+            wrappedDevices.add(device);
+        }
+        return wrappedDevices;
+    }
+
+    private BleDeviceWrapper wrapInternetDevice(BleDevice device) {
+        BleDeviceWrapper bleDeviceWrapper = new BleDeviceWrapper(device);
+        return bleDeviceWrapper;
     }
 
 

@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface InternetConnectionListener {
 
-    void internetDeviceLoaded(List<InternetDeviceWrapper> internetDeviceWrapperList);
-        void internetDeviceLoadedError(String errorMassage);
+    void internetDeviceLoadedReceive(List<InternetDeviceWrapper> internetDeviceWrapperList);
+    void internetDeviceLoadedErrorReceive(String errorMassage);
 }

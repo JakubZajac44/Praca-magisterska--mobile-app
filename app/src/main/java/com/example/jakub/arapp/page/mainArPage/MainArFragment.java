@@ -17,15 +17,10 @@ import com.example.jakub.arapp.R;
 import com.example.jakub.arapp.application.ConfigApp;
 import com.example.jakub.arapp.broadcastReceiver.internet.InternetBroadcastReceiver;
 import com.example.jakub.arapp.dialogFragment.SimpleChoiceDialog;
-import com.example.jakub.arapp.model.device.BleDeviceWrapper;
-import com.example.jakub.arapp.model.device.InternetDeviceWrapper;
 import com.example.jakub.arapp.model.device.IoTDevice;
 import com.example.jakub.arapp.page.mainArPage.bleDeviceStatusList.ListViewBleDeviceStatusAdapter;
-import com.example.jakub.arapp.utility.Constants;
 import com.example.jakub.arapp.utility.Logger;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -60,7 +55,7 @@ public class MainArFragment extends Fragment implements MainArContract.View {
 
     private Unbinder unbinder;
     private ListViewBleDeviceStatusAdapter adapter;
-    private List<IoTDevice> ioTDeviceList;
+
 
     private int itemPosition;
 
@@ -68,9 +63,8 @@ public class MainArFragment extends Fragment implements MainArContract.View {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ((MyApplication) getActivity().getApplication()).getAppComponent().inject(this);
-        ioTDeviceList = Collections.synchronizedList(new ArrayList<>());
         logger.log(TAG, "onCreate");
-        adapter = new ListViewBleDeviceStatusAdapter(context, ioTDeviceList);
+
 
     }
 
@@ -79,11 +73,17 @@ public class MainArFragment extends Fragment implements MainArContract.View {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.ar_settings_fragment, container, false);
         unbinder = ButterKnife.bind(this, view);
-        bleDeviceStatusListView.setAdapter(adapter);
+
         this.setListViewListener();
         presenter.attachView(this);
         logger.log(TAG, "onCreateView");
         return view;
+    }
+
+    @Override
+    public void setupModel(List<IoTDevice> ioTDeviceList) {
+        adapter = new ListViewBleDeviceStatusAdapter(context, ioTDeviceList);
+        bleDeviceStatusListView.setAdapter(adapter);
     }
 
     private void setListViewListener() {
@@ -104,7 +104,6 @@ public class MainArFragment extends Fragment implements MainArContract.View {
     @Override
     public void onResume() {
         logger.log(TAG, "onResume");
-        this.removeDeviceFromList();
         presenter.getSavedDevice();
         super.onResume();
     }
@@ -129,62 +128,7 @@ public class MainArFragment extends Fragment implements MainArContract.View {
     }
 
     @Override
-    public void upDateListViewIoTDevice(List<IoTDevice> ioTDevices) {
-        ioTDeviceList.addAll(ioTDevices);
-        adapter.notifyDataSetChanged();
-    }
-
-    private void removeDeviceFromList() {
-        logger.log(TAG, "Clear device form list");
-        List<IoTDevice> ioTDevicesToRemove = new ArrayList<>();
-        for (IoTDevice ioTDevice : ioTDeviceList) {
-            if (ioTDevice instanceof BleDeviceWrapper) {
-                ioTDevicesToRemove.add(ioTDevice);
-                logger.log(TAG, "Ble Device removed");
-            } else if (ioTDevice instanceof InternetDeviceWrapper) {
-                ioTDevicesToRemove.add(ioTDevice);
-                logger.log(TAG, "Internet Device removed");
-            }
-        }
-        ioTDeviceList.removeAll(ioTDevicesToRemove);
-    }
-
-    @Override
-    public void upDateListViewAllDevice(String address, int status) {
-        for (IoTDevice ioTDevice : ioTDeviceList) {
-            if (ioTDevice instanceof BleDeviceWrapper) {
-                if (((BleDeviceWrapper) ioTDevice).getAddress().equals(address)) {
-                    ioTDevice.setStatus(status);
-                    break;
-                }
-            }
-        }
-        adapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void upDateListViewAllInternetDevice(List<InternetDeviceWrapper> internetDeviceWrapperList) {
-        for (IoTDevice ioTDevice : ioTDeviceList) {
-            if (ioTDevice instanceof InternetDeviceWrapper) {
-                for (InternetDeviceWrapper internetDevice : internetDeviceWrapperList) {
-                    if (((InternetDeviceWrapper) ioTDevice).getId() == internetDevice.getId()) {
-                        ioTDevice.setStatus(Constants.CONNECTED_STATUS);
-                        ((InternetDeviceWrapper) ioTDevice).setUpdatetime(internetDevice.getUpdatetime());
-                        break;
-                    }
-                }
-            }
-        }
-        adapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void setAllInternetDeviceOffline() {
-        for (IoTDevice ioTDevice : ioTDeviceList) {
-            if (ioTDevice instanceof InternetDeviceWrapper) {
-                ioTDevice.setStatus(Constants.DISCONNECTED_STATUS);
-            }
-        }
+    public void notifyDataChanged() {
         adapter.notifyDataSetChanged();
     }
 
@@ -192,14 +136,9 @@ public class MainArFragment extends Fragment implements MainArContract.View {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
             case DIALOG_FRAGMENT:
-
                 if (resultCode == Activity.RESULT_OK) {
-                    IoTDevice device = ioTDeviceList.get(itemPosition);
-                    presenter.removeIotDevice(device);
-                    ioTDeviceList.remove(itemPosition);
-                    adapter.notifyDataSetChanged();
+                    presenter.removeIotDevice(itemPosition);
                 }
-
                 break;
         }
     }

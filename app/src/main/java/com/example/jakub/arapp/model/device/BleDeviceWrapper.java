@@ -24,6 +24,13 @@ public class BleDeviceWrapper extends IoTDevice{
         this.status = Constants.UNKNOWN_STATUS;
     }
 
+    public BleDeviceWrapper(BleDevice device){
+        this.status =Constants.CONNECTED_STATUS;
+        this.name = device.getName();
+        this.address = device.getAddress();
+        this.sample = "BRAK DANYCH";
+    }
+
     public BleDeviceWrapper(BleDevice device, int status){
         this.status =status;
         this.name = device.getName();

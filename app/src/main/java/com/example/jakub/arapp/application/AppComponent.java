@@ -2,6 +2,8 @@ package com.example.jakub.arapp.application;
 
 import com.example.jakub.arapp.MainActivity;
 import com.example.jakub.arapp.arEngine.ArActivity;
+import com.example.jakub.arapp.arEngine.ArManager;
+import com.example.jakub.arapp.arEngine.model.Scenario;
 import com.example.jakub.arapp.auth.AuthActivity;
 import com.example.jakub.arapp.bluetooth.BluetoothManagerModule;
 import com.example.jakub.arapp.bluetooth.connectionManager.ConnectedBleDevice;
@@ -34,7 +36,8 @@ import dagger.Component;
         , BluetoothManagerModule.class, BluetoothContract.BluetoothModule.class, IoTDeviceDbModule.class
         , MainArContract.ArSettingsModule.class, MapContract.ArSettingsModule.class, GpsProvider.GpsProviderModule.class
         , NotificationProvider.NotificationProviderModule.class, BackendConnectionProvider.BackendConnectionModule.class
-        , InternetModule.class, ConnectedBleDeviceProvider.ConnectedBleDeviceProviderModule.class})
+        , InternetModule.class, ConnectedBleDeviceProvider.ConnectedBleDeviceProviderModule.class
+        , ArManager.ArManagerProvider.class})
 public interface AppComponent {
 
     void inject(ArActivity arActivity);
@@ -55,5 +58,6 @@ public interface AppComponent {
 
     void inject(ConnectedBleDevice callback);
 
+    void inject(Scenario callback);
 
 }

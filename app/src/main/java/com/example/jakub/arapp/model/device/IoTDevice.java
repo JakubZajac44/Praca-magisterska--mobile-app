@@ -13,4 +13,6 @@ public abstract class IoTDevice {
     @Getter
     @Setter
     String sample;
+
+
 }

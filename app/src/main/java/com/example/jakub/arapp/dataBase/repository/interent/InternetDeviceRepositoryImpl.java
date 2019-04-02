@@ -89,6 +89,7 @@ public static final String TAG = InternetDeviceRepositoryImpl.class.getSimpleNam
         return internetDeviceWrapper;
     }
 
+    @Override
     public List<InternetDeviceWrapper> wrapListInternetDevice(List<InternetDevice> devices){
         List<InternetDeviceWrapper> wrappedDevices = new ArrayList<>();
         for (InternetDevice deviceWrapper : devices) {

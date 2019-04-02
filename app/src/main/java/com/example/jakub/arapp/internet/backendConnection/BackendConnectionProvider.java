@@ -21,7 +21,7 @@ public interface BackendConnectionProvider {
             "com.example.jakub.arapp.service.KEY_INTERNET_DEVICE_ERROR";
 
     void getInternetDevice();
-    void setUpListener(InternetConnectionListener listener);
+    void setUpListener(BackendConnectionListener listener);
     void removeListener();
 
 

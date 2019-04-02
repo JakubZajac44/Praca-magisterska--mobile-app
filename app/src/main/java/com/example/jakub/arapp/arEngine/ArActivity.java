@@ -1,9 +1,7 @@
 package com.example.jakub.arapp.arEngine;
 
-import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.ConfigurationInfo;
 import android.graphics.PixelFormat;
 import android.opengl.GLSurfaceView;
@@ -13,13 +11,14 @@ import android.widget.Toast;
 import com.example.jakub.arapp.MyApplication;
 import com.example.jakub.arapp.R;
 import com.example.jakub.arapp.arEngine.openGLprovider.MyRender;
+import com.example.jakub.arapp.broadcastReceiver.bluetooth.BleBroadcastReceiver;
+import com.example.jakub.arapp.broadcastReceiver.gps.GpsBroadcastReceiver;
+import com.example.jakub.arapp.broadcastReceiver.internet.InternetBroadcastReceiver;
 import com.example.jakub.arapp.motionSensor.MySensorManager;
 import com.example.jakub.arapp.motionSensor.gyroFilter.GyroscopeFilterProviderImpl;
 import com.example.jakub.arapp.motionSensor.sensorUtility.Orientation3d;
 import com.example.jakub.arapp.page.arViewPage.ArContract;
 import com.example.jakub.arapp.page.arViewPage.ArFragment;
-import com.example.jakub.arapp.service.BluetoothService;
-import com.example.jakub.arapp.utility.Constants;
 import com.example.jakub.arapp.utility.Logger;
 
 import java.util.Timer;
@@ -47,6 +46,17 @@ public class ArActivity extends AppCompatActivity {
     public MySensorManager mySensorManager;
     @Inject
     public GyroscopeFilterProviderImpl gyroscopeFilterProviderImpl;
+    @Inject
+    public ArManager arManager;
+    @Inject
+    public BleBroadcastReceiver bluetoothStateReceiver;
+    @Inject
+    public InternetBroadcastReceiver internetReceiver;
+    @Inject
+    public GpsBroadcastReceiver gpsReceiver;
+
+
+
     @BindView(R.id.glsurfaceView)
     GLSurfaceView mGLView;
     Observer<Orientation3d> observer;
@@ -83,12 +93,26 @@ public class ArActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        if (isOpelGL20Available()) {
+    protected void onStart() {
+        super.onStart();
+        this.registerBroadcastReceiver();
+        arManager.setupListener();
+        arManager.addScenario();
+        if (!isOpelGL20Available()) {
             if (observer == null) this.createObserver();
             mySensorManager.setListener(observer);
         }
+    }
+
+    private void registerBroadcastReceiver() {
+        this.registerReceiver(gpsReceiver, GpsBroadcastReceiver.makeGattUpdateIntentFilter());
+        this.registerReceiver(bluetoothStateReceiver, BleBroadcastReceiver.makeGattUpdateIntentFilter());
+        this.registerReceiver(internetReceiver, InternetBroadcastReceiver.makeGattUpdateIntentFilter());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
 
     }
 
@@ -119,7 +143,8 @@ public class ArActivity extends AppCompatActivity {
             @Override
             public void onComplete() {
                 logger.log(TAG, "All data emitted.");
-            }};
+            }
+        };
     }
 
     public <T extends Fragment> void replaceFragment(T fragment, String TAG) {
@@ -132,23 +157,34 @@ public class ArActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        this.finish();
+        finish();
     }
 
     @Override
-    protected void onDestroy() {
-        logger.log(TAG, "OnDestroy");
+    protected void onStop() {
+        logger.log(TAG,"onStop");
         observer.onComplete();
         observer = null;
         mySensorManager.removeListener();
         unbinder.unbind();
         fuseTimer.cancel();
         fuseTimer.purge();
-        super.onDestroy();
-        finish();
+        arManager.removeListener();
+        this.unregisterBroadcastReceiver();
+        super.onStop();
     }
 
+    @Override
+    protected void onDestroy() {
+        logger.log(TAG, "OnDestroy");
+        super.onDestroy();
+    }
 
+    private void unregisterBroadcastReceiver(){
+        unregisterReceiver(bluetoothStateReceiver);
+        unregisterReceiver(gpsReceiver);
+        unregisterReceiver(internetReceiver);
+    }
 
     public void positionDeviceChanged(Orientation3d newOrientation) {
         float azimuthDegrees = newOrientation.getAzimuthDegrees();
