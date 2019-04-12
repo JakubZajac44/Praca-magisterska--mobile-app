@@ -239,7 +239,6 @@ public class MainArPresenter implements MainArContract.Presenter, BleConnectionL
             }
         }
         view.notifyDataChanged();
-
     }
 
     @Override

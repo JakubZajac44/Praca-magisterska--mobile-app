@@ -1,7 +1,5 @@
 package com.example.jakub.arapp.internet.backendConnection;
 
-import com.example.jakub.arapp.broadcastReceiver.internet.InternetConnectionListener;
-
 import dagger.Binds;
 import dagger.Module;
 
@@ -21,7 +19,9 @@ public interface BackendConnectionProvider {
             "com.example.jakub.arapp.service.KEY_INTERNET_DEVICE_ERROR";
 
     void getInternetDevice();
+
     void setUpListener(BackendConnectionListener listener);
+
     void removeListener();
 
 
@@ -29,6 +29,6 @@ public interface BackendConnectionProvider {
     abstract class BackendConnectionModule {
 
         @Binds
-        public abstract BackendConnectionProvider connectionProvider (BackendConnectionProviderImpl connectionProvider);
+        public abstract BackendConnectionProvider connectionProvider(BackendConnectionProviderImpl connectionProvider);
     }
 }

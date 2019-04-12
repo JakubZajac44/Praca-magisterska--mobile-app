@@ -18,6 +18,8 @@ import com.example.jakub.arapp.motionSensor.gyroFilter.GyroscopeFilterProvider;
 import com.example.jakub.arapp.notification.NotificationProvider;
 import com.example.jakub.arapp.page.arViewPage.ArContract;
 import com.example.jakub.arapp.page.arViewPage.ArFragment;
+import com.example.jakub.arapp.page.authPage.AuthContract;
+import com.example.jakub.arapp.page.authPage.AuthFragment;
 import com.example.jakub.arapp.page.bluetoothDeviceListPage.BluetoothContract;
 import com.example.jakub.arapp.page.bluetoothDeviceListPage.BluetoothFragment;
 import com.example.jakub.arapp.page.mainArPage.MainArContract;
@@ -31,13 +33,13 @@ import javax.inject.Singleton;
 import dagger.Component;
 
 @Singleton
-@Component(modules = {AppModule.class, MySensorManager.MySensorManagerModule.class, ArContract.LoginModule.class
+@Component(modules = {AppModule.class, MySensorManager.MySensorManagerModule.class, ArContract.ArModule.class
         , GyroscopeFilterProvider.GyroscopeFilterModule.class, BluetoothScannerManager.BluetoothScannerManagerModule.class
         , BluetoothManagerModule.class, BluetoothContract.BluetoothModule.class, IoTDeviceDbModule.class
         , MainArContract.ArSettingsModule.class, MapContract.ArSettingsModule.class, GpsProvider.GpsProviderModule.class
         , NotificationProvider.NotificationProviderModule.class, BackendConnectionProvider.BackendConnectionModule.class
         , InternetModule.class, ConnectedBleDeviceProvider.ConnectedBleDeviceProviderModule.class
-        , ArManager.ArManagerProvider.class})
+        , ArManager.ArManagerProvider.class, AuthContract.AuthModule.class})
 public interface AppComponent {
 
     void inject(ArActivity arActivity);
@@ -59,5 +61,7 @@ public interface AppComponent {
     void inject(ConnectedBleDevice callback);
 
     void inject(Scenario callback);
+
+    void inject(AuthFragment fragment);
 
 }

@@ -1,4 +1,4 @@
 package com.example.jakub.arapp.arEngine.shape;
 
-public class FrameFactory {
+public abstract class Shape {
 }

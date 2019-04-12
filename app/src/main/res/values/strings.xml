@@ -31,4 +31,5 @@
     <string name="sample_text">Odczyt</string>
     <string name="time_sample_text">data</string>
     <string name="error_backend_connection">Brak połączenia z serwerem</string>
+    <string name="main_ar_title">Lista dostępnych urządzeń</string>
 </resources>

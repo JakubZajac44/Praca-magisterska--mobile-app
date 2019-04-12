@@ -13,7 +13,7 @@
         android:layout_marginStart="168dp"
         android:layout_marginTop="256dp"
         android:onClick="startMainActivity"
-        android:text="Button"
+        android:text="Zaloguj"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

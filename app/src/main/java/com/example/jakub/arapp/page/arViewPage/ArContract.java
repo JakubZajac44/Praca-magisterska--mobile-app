@@ -10,7 +10,7 @@ public interface ArContract {
     interface View {
 
         boolean isVisible();
-        void orientationChanged(Orientation3d newOrientation);
+        void orientationChangedText(Orientation3d newOrientation);
     }
 
     interface Presenter {
@@ -19,9 +19,9 @@ public interface ArContract {
     }
 
     @Module()
-    abstract class LoginModule {
+    abstract class ArModule {
 
         @Binds
-        public abstract ArContract.Presenter provideLoginPresenter (ArPresenter loginPresenter);
+        public abstract ArContract.Presenter provideArPresenter (ArPresenter arPresenter);
     }
 }

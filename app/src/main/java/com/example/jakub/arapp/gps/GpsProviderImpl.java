@@ -84,10 +84,10 @@ public class GpsProviderImpl implements GpsProvider {
 
     private String getProviderName() {
         Criteria criteria = new Criteria();
-        criteria.setPowerRequirement(Criteria.POWER_HIGH);
-        criteria.setAccuracy(Criteria.ACCURACY_FINE);
+        criteria.setPowerRequirement(Criteria.POWER_MEDIUM);
+        criteria.setAccuracy(Criteria.ACCURACY_MEDIUM);
         criteria.setSpeedRequired(true);
-        criteria.setSpeedAccuracy(Criteria.ACCURACY_HIGH);
+        criteria.setSpeedAccuracy(Criteria.ACCURACY_MEDIUM);
         criteria.setBearingRequired(false);
         criteria.setAltitudeRequired(false);
         criteria.setCostAllowed(false);

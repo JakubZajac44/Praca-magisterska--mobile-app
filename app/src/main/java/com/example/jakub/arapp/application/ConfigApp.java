@@ -15,7 +15,7 @@ public class ConfigApp {
     public static int PROFILE_DEV = 1;
     public static int PROFILE_PROD = 0;
 
-    public static String URL = "http://172.16.0.224:8081/";
+    public static String URL = "http://192.168.0.143:8081/";
 
 
     private int PROFILE ;

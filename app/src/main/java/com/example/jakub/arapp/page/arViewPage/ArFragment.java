@@ -94,11 +94,6 @@ public class ArFragment extends Fragment implements ArContract.View {
         super.onDestroy();
     }
 
-
-
-
-
-
     private String cameraId;
     private Size imageDimension;
     protected CameraDevice cameraDevice;
@@ -255,10 +250,10 @@ public class ArFragment extends Fragment implements ArContract.View {
 
 
     @Override
-    public void orientationChanged(Orientation3d newOrientation) {
+    public void orientationChangedText(Orientation3d newOrientation) {
         float azimuthDegrees = newOrientation.getAzimuthDegrees();
         float pitchDegrees = newOrientation.getPitchDegrees();
         azimuthTextView.setText(MathOperation.numberToStringRound(azimuthDegrees,2));
-        pitchTextView.setText(MathOperation.numberToStringRound(pitchDegrees,2));
+        pitchTextView.setText(MathOperation.numberToStringRound(360-pitchDegrees,2));
     }
 }

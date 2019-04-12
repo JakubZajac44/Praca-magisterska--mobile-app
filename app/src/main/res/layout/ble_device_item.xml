@@ -18,14 +18,16 @@
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_weight="3"
-            android:textSize="20dp"/>
+            android:textSize="20dp"
+            android:textColor="@color/black"/>
 
         <TextView
             android:id="@+id/bleDeviceItemAddress"
             android:layout_weight="2"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
-            android:textSize="20dp"/>
+            android:textSize="20dp"
+            android:textColor="@color/black"/>
 
     </LinearLayout>
 

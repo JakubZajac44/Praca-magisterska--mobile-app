@@ -20,5 +20,14 @@ public class Constants {
     public static final int INIT_RATIO = 20;
 
     public static final double ERATH_R = 6378.14;
+    public static final float SCENE_R = 7.0f;
+
+    public static final float[] BLACK_COLOR = {0f,0f,0f,1f};
+    public static final float[] WHITE_COLOR = {1f,1f,1f,1f};
+    public static final float[] BLUE_COLOR = {0f,0f,1f,1f};
+    public static final float[] RED_COLOR = {1f,0f,0f,1f};
+    public static final float[] GREEN_COLOR = {0f,1f,0f,1f};
+    public static final float[] INVISIBLE_COLOR = {0f,0f,0f,0f};
+
 
 }
