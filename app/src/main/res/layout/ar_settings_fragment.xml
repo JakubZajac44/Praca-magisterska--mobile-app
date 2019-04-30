@@ -50,7 +50,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_marginBottom="15dp"
-        android:text="Ar view" />
+        android:text="Ar loginView" />
 
 
 </RelativeLayout>

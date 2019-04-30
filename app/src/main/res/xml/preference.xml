@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:title="@string/settings"
+    android:summary="@string/settings">
+
+    <PreferenceCategory android:title="@string/pref_category_account">
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="ACCOUNT_REGISTRATION_STATUS_KEY"
+            android:title="@string/log_out"
+            android:summary="@string/registration_summary_settings"/>
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="FINGERPRINT_USER_CONFIRMATION"
+            android:title="@string/log_out"
+            android:summary="@string/fingerprint_summary_settings"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/pref_category_ar">
+
+
+    </PreferenceCategory>
+</PreferenceScreen>

@@ -1,10 +1,10 @@
-package com.example.jakub.arapp.internet.backendConnection;
+package com.example.jakub.arapp.internet.ApiConnection;
 
 import android.content.Context;
 
-import com.example.jakub.arapp.broadcastReceiver.internet.InternetConnectionListener;
+import com.example.jakub.arapp.application.ConfigApp;
 import com.example.jakub.arapp.model.device.InternetDeviceWrapper;
-import com.example.jakub.arapp.internet.api.ApiService;
+import com.example.jakub.arapp.internet.api.ApiConnection;
 import com.example.jakub.arapp.utility.Logger;
 
 import java.util.List;
@@ -16,9 +16,9 @@ import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Retrofit;
 
-public class BackendConnectionProviderImpl implements BackendConnectionProvider {
+public class ApiConnectionProviderImpl implements ApiConnectionProvider {
 
-    public static final String TAG = BackendConnectionProviderImpl.class.getSimpleName();
+    public static final String TAG = ApiConnectionProviderImpl.class.getSimpleName();
 
     @Inject
     Context context;
@@ -29,17 +29,17 @@ public class BackendConnectionProviderImpl implements BackendConnectionProvider 
     @Inject
     Retrofit retrofit;
 
-    private BackendConnectionListener listener;
+    private ApiConnectionListener listener;
 
 
     @Inject
-    public BackendConnectionProviderImpl() {
+    public ApiConnectionProviderImpl() {
     }
 
     @Override
     public void getInternetDevice() {
-        ApiService apiService = retrofit.create(ApiService.class);
-        apiService.getAllInternetDevice()
+        ApiConnection apiConnection = retrofit.create(ApiConnection.class);
+        apiConnection.getAllInternetDevice("Token "+ ConfigApp.TOKEN)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new DisposableSingleObserver<List<InternetDeviceWrapper>>() {
@@ -58,7 +58,7 @@ public class BackendConnectionProviderImpl implements BackendConnectionProvider 
     }
 
     @Override
-    public void setUpListener(BackendConnectionListener listener) {
+    public void setUpListener(ApiConnectionListener listener) {
         this.listener = listener;
     }
 

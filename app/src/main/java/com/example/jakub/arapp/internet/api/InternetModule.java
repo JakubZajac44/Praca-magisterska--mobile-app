@@ -38,7 +38,7 @@ public class InternetModule {
     Gson provideGson() {
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES);
-        return gsonBuilder.create();
+        return gsonBuilder.setLenient().create();
     }
 
     @Provides

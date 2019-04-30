@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Binder;
 import android.os.Handler;
@@ -15,12 +16,11 @@ import android.util.Log;
 import com.example.jakub.arapp.MyApplication;
 import com.example.jakub.arapp.bluetooth.connectionManager.ConnectedBleDevice;
 import com.example.jakub.arapp.bluetooth.connectionManager.ConnectedBleDeviceProvider;
-import com.example.jakub.arapp.broadcastReceiver.internet.InternetConnectionListener;
 import com.example.jakub.arapp.dataBase.data.ble.BleDevice;
 import com.example.jakub.arapp.dataBase.repository.ble.BleDeviceRepository;
 import com.example.jakub.arapp.gps.GpsProvider;
-import com.example.jakub.arapp.internet.backendConnection.BackendConnectionListener;
-import com.example.jakub.arapp.internet.backendConnection.BackendConnectionProvider;
+import com.example.jakub.arapp.internet.ApiConnection.ApiConnectionListener;
+import com.example.jakub.arapp.internet.ApiConnection.ApiConnectionProvider;
 import com.example.jakub.arapp.model.device.InternetDeviceWrapper;
 import com.example.jakub.arapp.notification.NotificationProvider;
 import com.example.jakub.arapp.notification.NotificationProviderImpl;
@@ -45,13 +45,13 @@ import io.reactivex.schedulers.Schedulers;
 
 
 public class BluetoothService extends Service
-        implements BackendConnectionListener
-{
+        implements ApiConnectionListener {
 
     private final BluetoothServiceBinder binder = new BluetoothServiceBinder();
     private final String TAG = BluetoothService.class.getSimpleName();
     private final int INTERVAL_TIME = 10000;
     private final int DELAY_TIME = 1000;
+
 
     @Inject
     public Logger logger;
@@ -69,9 +69,11 @@ public class BluetoothService extends Service
     ConnectedBleDeviceProvider connectedBleDeviceProviderImpl;
     @Inject
     NotificationProvider notificationProvider;
+    @Inject
+    SharedPreferences sharedPreferences;
 
     @Inject
-    BackendConnectionProvider backendConnectionProvider;
+    ApiConnectionProvider apiConnectionProvider;
     @SuppressLint("HandlerLeak")
     public Handler timeHandler = new Handler() {
         @Override
@@ -100,7 +102,7 @@ public class BluetoothService extends Service
 
                         }
                     });
-            backendConnectionProvider.getInternetDevice();
+           if(!isRunningWithoutLogin) apiConnectionProvider.getInternetDevice();
         }
 
         private void tryConnectToBleDevice(List<BleDevice> bleDevices) {
@@ -125,6 +127,7 @@ public class BluetoothService extends Service
     Observer<Location> gpsObserver;
     private Timer timer;
     private TimeUpdateTask task;
+    private boolean isRunningWithoutLogin;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -147,12 +150,13 @@ public class BluetoothService extends Service
 
     public void start() {
         startForeground(NotificationProviderImpl.NOTIFICATION_ID, notificationProvider.getNotificationProvider());
+        isRunningWithoutLogin = sharedPreferences.getBoolean(Constants.RUNNING_WITHOUT_LOGIN,false);
         timer = new Timer();
         task = new TimeUpdateTask();
         timer.schedule(task, DELAY_TIME, INTERVAL_TIME);
         this.createGpsObserver();
         gpsProvider.setGpsListener(gpsObserver);
-        backendConnectionProvider.setUpListener(this);
+        apiConnectionProvider.setUpListener(this);
     }
 
     private void createGpsObserver() {
@@ -212,7 +216,7 @@ public class BluetoothService extends Service
         this.destroyTimer();
         connectedBleDeviceProviderImpl.removeAllConnection();
         this.destroyGpsObserver();
-        backendConnectionProvider.removeListener();
+        apiConnectionProvider.removeListener();
         stopForeground(true);
         stopSelf();
         super.onDestroy();
@@ -224,15 +228,15 @@ public class BluetoothService extends Service
 
     @Override
     public void internetDeviceLoaded(List<InternetDeviceWrapper> internetDeviceWrapperList) {
-        Intent intent = new Intent(BackendConnectionProvider.ACTION_INTERNET_DEVICE_LOADED);
-        intent.putParcelableArrayListExtra(BackendConnectionProvider.KEY_INTERNET_DEVICE_LOADED, (ArrayList<InternetDeviceWrapper>) internetDeviceWrapperList);
+        Intent intent = new Intent(ApiConnectionProvider.ACTION_INTERNET_DEVICE_LOADED);
+        intent.putParcelableArrayListExtra(ApiConnectionProvider.KEY_INTERNET_DEVICE_LOADED, (ArrayList<InternetDeviceWrapper>) internetDeviceWrapperList);
         sendCustomBroadcast(intent);
     }
 
     @Override
     public void internetDeviceLoadedError(String errorMassage) {
-        Intent intent = new Intent(BackendConnectionProvider.ACTION_INTERNET_DEVICE_ERROR);
-        intent.putExtra(BackendConnectionProvider.KEY_INTERNET_DEVICE_ERROR, errorMassage);
+        Intent intent = new Intent(ApiConnectionProvider.ACTION_INTERNET_DEVICE_ERROR);
+        intent.putExtra(ApiConnectionProvider.KEY_INTERNET_DEVICE_ERROR, errorMassage);
         sendCustomBroadcast(intent);
         logger.log(TAG, errorMassage);
     }

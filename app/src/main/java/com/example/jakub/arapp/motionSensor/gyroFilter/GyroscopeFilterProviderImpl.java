@@ -1,9 +1,9 @@
 package com.example.jakub.arapp.motionSensor.gyroFilter;
 
+import android.content.Context;
 import android.hardware.SensorEvent;
-import android.hardware.SensorManager;
 
-import com.example.jakub.arapp.motionSensor.MySensorManager;
+import com.example.jakub.arapp.motionSensor.SensorManager;
 import com.example.jakub.arapp.motionSensor.sensorUtility.Orientation3d;
 import com.example.jakub.arapp.utility.Logger;
 
@@ -21,11 +21,14 @@ public class GyroscopeFilterProviderImpl implements GyroscopeFilterProvider {
     @Inject
     public Logger logger;
 
+    @Inject
+    public Context context;
+
     private static final String TAG = GyroscopeFilterProviderImpl.class.getSimpleName();
     public static final float EPSILON = 0.000000001f;
     public static final float FILTER_COEFFICIENT = 0.98f;
     private static final float NS2S = 1.0f / 1000000000.0f;
-    private MySensorManager listener;
+    private SensorManager listener;
     int axisX;
     int axisY;
     private boolean initState = true;
@@ -42,15 +45,11 @@ public class GyroscopeFilterProviderImpl implements GyroscopeFilterProvider {
     @Inject
     public GyroscopeFilterProviderImpl() {
         this.initTable();
-//        lastOrientation3d = new Orientation3d();
-//        logger = new Logger();
     }
 
-    public void setListener(MySensorManager listener) {
+    public void setListener(SensorManager listener) {
 
         this.listener = listener;
-//        if(logger==null) Log.i(TAG,"null");
-//        else Log.i(TAG,"not null");
     }
 
     private void initTable() {
@@ -79,7 +78,7 @@ public class GyroscopeFilterProviderImpl implements GyroscopeFilterProvider {
             float[] initMatrix = new float[9];
             initMatrix = getRotationMatrixFromOrientation(accMagOrientation);
             float[] test = new float[3];
-            SensorManager.getOrientation(initMatrix, test);
+            android.hardware.SensorManager.getOrientation(initMatrix, test);
             gyroMatrix = matrixMultiplication(gyroMatrix, initMatrix);
             initState = false;
         }
@@ -100,13 +99,23 @@ public class GyroscopeFilterProviderImpl implements GyroscopeFilterProvider {
         // convert rotation vector into rotation matrix
         float[] deltaMatrix = new float[9];
 
-        axisX = SensorManager.AXIS_X;
-        axisY = SensorManager.AXIS_Z;
+//        axisX = SensorManager.AXIS_X;
+//        axisY = SensorManager.AXIS_Z;
 
-        SensorManager.getRotationMatrixFromVector(deltaMatrix, deltaVector);
+        axisX = android.hardware.SensorManager.AXIS_X;
+        axisY = android.hardware.SensorManager.AXIS_Z;
+
+        android.hardware.SensorManager.getRotationMatrixFromVector(deltaMatrix, deltaVector);
         gyroMatrix = matrixMultiplication(gyroMatrix, deltaMatrix);
-        SensorManager.remapCoordinateSystem(gyroMatrix, axisX, axisY, orientationValuesRemap);
-        SensorManager.getOrientation(orientationValuesRemap, gyroOrientation);
+
+//        int rotation = ((WindowManager) context.getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getRotation();
+//        if(rotation == 0) // Default display rotation is portrait
+//            SensorManager.remapCoordinateSystem(gyroMatrix, SensorManager.AXIS_MINUS_X, SensorManager.AXIS_Y, orientationValuesRemap);
+//        else   // Default display rotation is landscape
+//            SensorManager.remapCoordinateSystem(gyroMatrix, SensorManager.AXIS_Y, SensorManager.AXIS_MINUS_X, orientationValuesRemap);
+
+        android.hardware.SensorManager.remapCoordinateSystem(gyroMatrix, axisX, axisY, orientationValuesRemap);
+        android.hardware.SensorManager.getOrientation(orientationValuesRemap, gyroOrientation);
         orientation3d = new Orientation3d(gyroOrientation[0], gyroOrientation[1], gyroOrientation[2]);
 
         if (this.shouldActualize(orientation3d)) {

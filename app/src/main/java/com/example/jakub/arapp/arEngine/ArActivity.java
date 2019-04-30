@@ -8,7 +8,6 @@ import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import com.example.jakub.arapp.MainActivity;
 import com.example.jakub.arapp.MyApplication;
 import com.example.jakub.arapp.R;
 import com.example.jakub.arapp.arEngine.model.Scenario;
@@ -18,7 +17,7 @@ import com.example.jakub.arapp.arEngine.openGLprovider.MyRender;
 import com.example.jakub.arapp.broadcastReceiver.bluetooth.BleBroadcastReceiver;
 import com.example.jakub.arapp.broadcastReceiver.gps.GpsBroadcastReceiver;
 import com.example.jakub.arapp.broadcastReceiver.internet.InternetBroadcastReceiver;
-import com.example.jakub.arapp.motionSensor.MySensorManager;
+import com.example.jakub.arapp.motionSensor.SensorManager;
 import com.example.jakub.arapp.motionSensor.gyroFilter.GyroscopeFilterProviderImpl;
 import com.example.jakub.arapp.motionSensor.sensorUtility.Orientation3d;
 import com.example.jakub.arapp.page.arViewPage.ArContract;
@@ -49,7 +48,7 @@ public class ArActivity extends AppCompatActivity implements ScenarioListener {
     @Inject
     public Logger logger;
     @Inject
-    public MySensorManager mySensorManager;
+    public SensorManager sensorManager;
     @Inject
     public GyroscopeFilterProviderImpl gyroscopeFilterProviderImpl;
     @Inject
@@ -107,7 +106,7 @@ public class ArActivity extends AppCompatActivity implements ScenarioListener {
 //        if(isScenarioReady)  myGlView = new MyGLSurfaceView(mGLView,arManager.getMyRender());
         if (isOpelGL20Available()) {
             if (observer == null) this.createObserver();
-            mySensorManager.setListener(observer);
+            sensorManager.setListener(observer);
         }
     }
 
@@ -167,7 +166,7 @@ public class ArActivity extends AppCompatActivity implements ScenarioListener {
         logger.log(TAG,"onStop");
         observer.onComplete();
         observer = null;
-        mySensorManager.removeListener();
+        sensorManager.removeListener();
         fuseTimer.cancel();
         fuseTimer.purge();
         arManager.removeListener();

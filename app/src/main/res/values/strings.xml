@@ -8,8 +8,8 @@
     <string name="pitch_text">Pułap:</string>
     <string name="ble_not_supported">Bluetooth LE not suported</string>
     <string name="ar_navigation_title">Widok AR</string>
-    <string name="ble_navigation_title">Scanner</string>
-    <string name="list_navigation_title">Saved Device</string>
+    <string name="ble_navigation_title">Skaner</string>
+    <string name="list_navigation_title">Mapa urządzeń</string>
     <string name="ble_device_scanning_title">Dostępne urządzenia</string>
     <string name="scanning_button_name">Skanuj</string>
     <string name="saving_connecting_button_name">Zapisz i połącz się</string>
@@ -32,4 +32,25 @@
     <string name="time_sample_text">data</string>
     <string name="error_backend_connection">Brak połączenia z serwerem</string>
     <string name="main_ar_title">Lista dostępnych urządzeń</string>
+    <string name="settings_navigation_title">Ustawienia</string>
+    <string name="gmail_status_signed">Zaloguj sie przez konto Google</string>
+    <string name="pref_category_account">Konto</string>
+    <string name="pref_category_ar">Rozszerzona Rzeczywistość</string>
+    <string name="settings">Ustawienia</string>
+    <string name="register_error_not_valid_text">Błędne dane</string>
+    <string name="register_error_user_exist">Nazwa użytkownika jest zajęta</string>
+    <string name="login_error_invalid_pin">Błędny PIN</string>
+    <string name="login_error_wrong_pin">PIN jest za krótki</string>
+    <string name="login_error_user_not_exist">Nie ma takiego użytkownika</string>
+    <string name="api_error">Błąd serwera</string>
+    <string name="google_settings_account">Konto Google</string>
+    <string name="running_without_login">Opcja dostępna dla zalogowanych użytkowników!</string>
+    <string name="registration_summary_settings">Pamiętaj że tylko zalogowni użytkownicy mają dostęp do wszystkich funkcji aplikacji.</string>
+    <string name="log_out">Wyloguj</string>
+
+    <string name="fingerprintNotRecognized">Spróbuj ponownie</string>
+    <string name="loginFingerprintText">Przyłóż palec aby sie zalogować</string>
+    <string name="yes_text">Tak</string>
+    <string name="no_text">Nie</string>
+    <string name="fingerprint_summary_settings">Opcja ta pozwala na logowanie za pomocą odcisku palca.</string>
 </resources>

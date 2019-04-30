@@ -95,14 +95,14 @@ public class MyRender implements GLSurfaceView.Renderer {
             if (singleFrame.getStatus() == Constants.CONNECTED_STATUS) {
 
             }
-            Matrix.multiplyMM(scratch, 0, mMVPMatrix, 0, singleFrame.mModelMatrix, 0);
+            Matrix.multiplyMM(scratch, 0, mMVPMatrix, 0, singleFrame.getmModelMatrix(), 0);
             singleFrame.draw(scratch,gl);
         }
         for (InternetDeviceShape singleFrame : internetDeviceShapes) {
             if (singleFrame.getStatus() == Constants.CONNECTED_STATUS) {
 
             }
-            Matrix.multiplyMM(scratch, 0, mMVPMatrix, 0, singleFrame.mModelMatrix, 0);
+            Matrix.multiplyMM(scratch, 0, mMVPMatrix, 0, singleFrame.getmModelMatrix(), 0);
             singleFrame.draw(scratch,gl);
         }
     }
@@ -111,7 +111,8 @@ public class MyRender implements GLSurfaceView.Renderer {
         for (IoTDevice device : ioTDevices) {
             if (device instanceof BleDeviceWrapper) {
                 BleDeviceShape deviceShape = new BleDeviceShape((BleDeviceWrapper) device, context);
-                deviceShape.setColor(Constants.INVISIBLE_COLOR);
+//                deviceShape.setColor(Constants.INVISIBLE_COLOR);
+                deviceShape.setStatusTexture(Constants.UNKNOWN_STATUS);
                 bleDeviceShapes.add(deviceShape);
             } else if (device instanceof InternetDeviceWrapper) {
                 double horizontalAngle = MathOperation.angleFromCoordinate(50.0980585, 19.9731165999, ((InternetDeviceWrapper) device).getLat(), ((InternetDeviceWrapper) device).getLon());
@@ -127,10 +128,10 @@ public class MyRender implements GLSurfaceView.Renderer {
             for (InternetDeviceShape deviceShape : internetDeviceShapes) {
                 if (deviceShape.getId() == deviceWrapper.getId()) {
                     deviceShape.setStatus(Constants.CONNECTED_STATUS);
-                    deviceShape.setColor(Constants.GREEN_COLOR);
+//                    deviceShape.setColor(Constants.GREEN_COLOR);
+                    deviceShape.setStatusTexture(Constants.CONNECTED_STATUS);
                     deviceShape.setUpdatetime(deviceWrapper.getUpdatetime());
                     deviceShape.setSample(deviceWrapper.getSample());
-                    deviceShape.invalidate();
                 }
             }
         }
@@ -138,7 +139,8 @@ public class MyRender implements GLSurfaceView.Renderer {
 
     public void setAllInternetDeviceOffline() {
         for (InternetDeviceShape device : internetDeviceShapes) {
-            device.setColor(Constants.RED_COLOR);
+//            device.setColor(Constants.RED_COLOR);
+            device.setStatusTexture(Constants.DISCONNECTED_STATUS);
             device.setStatus(Constants.DISCONNECTED_STATUS);
         }
     }
@@ -148,19 +150,21 @@ public class MyRender implements GLSurfaceView.Renderer {
             if (deviceShape.getAddress().equals(address)) {
                 switch (status) {
                     case Constants.CONNECTED_STATUS:
-                        deviceShape.setColor(Constants.GREEN_COLOR);
+//                        deviceShape.setColor(Constants.GREEN_COLOR);
+                        deviceShape.setStatusTexture(Constants.CONNECTED_STATUS);
                         deviceShape.setStatus(Constants.CONNECTED_STATUS);
                         break;
                     case Constants.DISCONNECTED_STATUS:
-                        deviceShape.setColor(Constants.RED_COLOR);
+//                        deviceShape.setColor(Constants.RED_COLOR);
+                        deviceShape.setStatusTexture(Constants.DISCONNECTED_STATUS);
                         deviceShape.setStatus(Constants.DISCONNECTED_STATUS);
                         break;
                     default:
-                        deviceShape.setColor(Constants.BLUE_COLOR);
+//                        deviceShape.setColor(Constants.BLUE_COLOR);
+                        deviceShape.setStatusTexture(Constants.UNKNOWN_STATUS);
                         deviceShape.setStatus(Constants.UNKNOWN_STATUS);
                         break;
                 }
-                deviceShape.invalidate();
             }
         }
     }
@@ -173,8 +177,8 @@ public class MyRender implements GLSurfaceView.Renderer {
             if (deviceShape.getAddress().equals(address)) {
                 deviceShape.setSample(sample);
                 deviceShape.changeCords(azimuth, pitch);
-                deviceShape.invalidate();
-                deviceShape.setColor(Constants.GREEN_COLOR);
+//                deviceShape.setColor(Constants.GREEN_COLOR);
+                deviceShape.setStatusTexture(Constants.CONNECTED_STATUS);
             }
         }
     }

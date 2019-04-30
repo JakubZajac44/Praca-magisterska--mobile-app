@@ -4,6 +4,7 @@ package com.example.jakub.arapp.page.mapPage;
 import android.content.Context;
 import android.location.Location;
 
+import com.example.jakub.arapp.R;
 import com.example.jakub.arapp.broadcastReceiver.gps.GpsBroadcastReceiver;
 import com.example.jakub.arapp.broadcastReceiver.gps.GpsLocationListener;
 import com.example.jakub.arapp.broadcastReceiver.internet.InternetBroadcastReceiver;
@@ -100,7 +101,7 @@ public class MapPresenter implements MapContract.Presenter, GpsLocationListener,
             @Override
             public void onError(Throwable e) {
                 logger.log(TAG,e.getMessage());
-                view.showMessage(e.getMessage());
+                view.showMessage(context.getString(R.string.api_error));
             }
         });
     }
@@ -129,7 +130,7 @@ public class MapPresenter implements MapContract.Presenter, GpsLocationListener,
 
     @Override
     public void internetDeviceLoadedErrorReceive(String errorMassage) {
-        view.showMessage(errorMassage);
+        view.showMessage(context.getString(R.string.api_error));
         view.removeAllInternetDeviceMarker();
         allInternetDevice.clear();
     }

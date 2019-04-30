@@ -27,7 +27,7 @@ public interface MapContract {
     }
 
     @Module()
-    abstract class ArSettingsModule {
+    abstract class MapModule {
 
         @Binds
         public abstract MapContract.Presenter provideMapPresenter (MapPresenter mapPresenter);

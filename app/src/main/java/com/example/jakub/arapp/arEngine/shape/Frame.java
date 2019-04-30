@@ -21,152 +21,51 @@ import javax.microedition.khronos.opengles.GL10;
 import lombok.Getter;
 import lombok.Setter;
 
-public class Frame extends Shape{
+public class Frame extends ShapeSquare {
+    static final int CORDS_PER_VERTEX = 3;
 
-    // number of coordinates per vertex in this array
-    static final int COORDS_PER_VERTEX = 3;
+    private final int vertexStride = CORDS_PER_VERTEX * 4; // 4 bytes per vertex
+    private final int mProgram;
+    private final FloatBuffer textureBuffer;
 
-    public final int vertexStride = COORDS_PER_VERTEX * 4; // 4 bytes per vertex
-    public final int mProgram;
-    public final String vertexShaderCode =
-
-            "uniform mat4 uMVPMatrix;" +
-                    "attribute vec4 vPosition;" +
-                    "void main() {" +
-                    "  gl_Position = uMVPMatrix * vPosition;" +
-                    "}";
-
-    public final String fragmentShaderCode =
-            "precision mediump float;" +
-                    "uniform vec4 vColor;" +
-                    "void main() {" +
-                    "  gl_FragColor = vColor;" +
-                    "}";
-
-    public float[] mModelMatrix = new float[16];
-    public FloatBuffer vertexBuffer;
-    public ShortBuffer drawListBuffer;
-    public int mPositionHandle;
-    public int mColorHandle;
-    public int mMVPMatrixHandle;
-    public short drawOrder[] = {0, 1, 2, 0, 2, 3};
     @Getter
     @Setter
     float azimuth;
     @Setter
     @Getter
     float pitch;
-    float[] aaa = new float[12];
-    float color[] = new float[4];
-    float[] cubeTextureCoordinateData;
-    float textureCoordinates[] = {0.0f, 0.0f, //
-            1.0f, 0.0f, //
-            1.0f, 1.0f, //
-            0.0f, 1.0f, //
-    };
+    private Bitmap bitmap;
+    private boolean bitmapChanged = false;
+    private FloatBuffer vertexBuffer;
+    private ShortBuffer drawListBuffer;
+    private int mPositionHandle;
+    private int mColorHandle;
+    private int mMVPMatrixHandle;
     private Context context;
-
-
-///////*********************************** NOWE *****************************************//
-
-
-    private final String vertexShaderCodee =
-            "uniform mat4 uMVPMatrix;" +
-                    "attribute vec4 vPosition;" +
-                    "attribute vec2 a_TextureCoordinates;" +
-                    "varying vec2 v_TextureCoordinates;" +
-                    "void main() {" +
-                    "  gl_Position = uMVPMatrix * vPosition;" +
-                    " v_TextureCoordinates = a_TextureCoordinates;" +
-                    "}";
-    private final String fragmentShaderCodee =
-            "precision mediump float;" +
-                    "uniform sampler2D u_TextureUnit;"+
-                    "varying vec2 v_TextureCoordinates;" +
-                    "void main() {" +
-                    "   gl_FragColor = texture2D(u_TextureUnit, v_TextureCoordinates);" +
-                    "}";
-
-    private final FloatBuffer textureBuffer;
     private int textureDataHandle;
     private int textureUniformHandle;
     private int textureCoordinateHandle;
-    private int loadTexture(final Context context){    final int[] textureHandle = new int[1];
-
-        GLES20.glGenTextures(1, textureHandle, 0);
-
-        if (textureHandle[0] != 0)
-        {
-            final BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inScaled = false;   // No pre-scaling
-
-            // Read in the resource
-            final Bitmap bitmap  = BitmapFactory.decodeResource(context.getResources(),
-                    R.drawable.device_icon);
-
-            // Bind to the texture in OpenGL
-            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureHandle[0]);
-
-            GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_REPEAT);
-            GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_REPEAT);
-
-            // Set filtering
-            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR);
-            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
-
-            // Load the bitmap into the bound texture.
-            GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
-
-            // Recycle the bitmap, since its data has been loaded into OpenGL.
-            bitmap.recycle();
-        }
-        if (textureHandle[0] == 0)
-        {
-            throw new RuntimeException("Error loading texture.");
-        }
-
-        return textureHandle[0];
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     public Frame(Context context, double azimuth, double pitch) {
         this.context = context;
-        this.setColor(Constants.WHITE_COLOR);
+//        this.setColor(Constants.WHITE_COLOR);
+//        this.setStatusTexture(Constants.UNKNOWN_STATUS);
         this.prepareCords(azimuth, pitch);
         Matrix.setIdentityM(mModelMatrix, 0);
-        // initialize byte buffer for the draw list
-        ByteBuffer dlb = ByteBuffer.allocateDirect(
-                // (# of coordinate values * 2 bytes per short)
-                drawOrder.length * 2);
+
+        ByteBuffer dlb = ByteBuffer.allocateDirect(drawOrder.length * 2);
         dlb.order(ByteOrder.nativeOrder());
         drawListBuffer = dlb.asShortBuffer();
         drawListBuffer.put(drawOrder);
         drawListBuffer.position(0);
 
-/////////////////*******************************///////////
         ByteBuffer texCoordinates = ByteBuffer.allocateDirect(textureCoordinates.length * 4);
         texCoordinates.order(ByteOrder.nativeOrder());
         textureBuffer = texCoordinates.asFloatBuffer();
         textureBuffer.put(textureCoordinates);
         textureBuffer.position(0);
 
-        textureDataHandle = loadTexture(this.context);
-//////////////////////////*************************************///////////////////
+        textureDataHandle = this.loadTexture(context, R.drawable.device_icon_green);
         int vertexShader = MyRender.loadShader(GLES20.GL_VERTEX_SHADER,
                 vertexShaderCodee);
         int fragmentShader = MyRender.loadShader(GLES20.GL_FRAGMENT_SHADER,
@@ -178,28 +77,54 @@ public class Frame extends Shape{
         GLES20.glLinkProgram(mProgram);
     }
 
+    private int loadTexture(final Context context, int resourceId) {
+        final int[] textureHandle = new int[1];
 
+        GLES20.glGenTextures(1, textureHandle, 0);
+
+        if (textureHandle[0] != 0) {
+            final BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inScaled = false;
+
+            final Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), resourceId);
+
+            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureHandle[0]);
+
+            GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_REPEAT);
+            GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_REPEAT);
+
+            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR);
+            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
+
+            GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
+        }
+        if (textureHandle[0] == 0) {
+            throw new RuntimeException("Error loading texture.");
+        }
+
+        return textureHandle[0];
+    }
 
     private float[] getCordsFromAngle(double azimuth, double pitch) {
 
         float R = Constants.SCENE_R;
         double scale = 3.0;
         double azimuthPlus = Math.toRadians(azimuth + scale);
-        double azimthMius = Math.toRadians(azimuth - scale);
+        double azimuthMinus = Math.toRadians(azimuth - scale);
         double pitchPlus = Math.toRadians(pitch + scale);
-        double pitchMius = Math.toRadians(pitch - scale);
+        double pitchMinus = Math.toRadians(pitch - scale);
 
-        float x1 = R * (float) Math.cos(azimthMius) * (float) Math.cos(pitchPlus);
-        float z1 = R * (float) Math.sin(azimthMius) * (float) Math.cos(pitchPlus);
+        float x1 = R * (float) Math.cos(azimuthMinus) * (float) Math.cos(pitchPlus);
+        float z1 = R * (float) Math.sin(azimuthMinus) * (float) Math.cos(pitchPlus);
         float y1 = R * (float) Math.sin(pitchPlus);
 
-        float x2 = R * (float) Math.cos(azimthMius) * (float) Math.cos(pitchMius);
-        float z2 = R * (float) Math.sin(azimthMius) * (float) Math.cos(pitchMius);
-        float y2 = R * (float) Math.sin(pitchMius);
+        float x2 = R * (float) Math.cos(azimuthMinus) * (float) Math.cos(pitchMinus);
+        float z2 = R * (float) Math.sin(azimuthMinus) * (float) Math.cos(pitchMinus);
+        float y2 = R * (float) Math.sin(pitchMinus);
 
-        float x3 = R * (float) Math.cos(azimuthPlus) * (float) Math.cos(pitchMius);
-        float z3 = R * (float) Math.sin(azimuthPlus) * (float) Math.cos(pitchMius);
-        float y3 = R * (float) Math.sin(pitchMius);
+        float x3 = R * (float) Math.cos(azimuthPlus) * (float) Math.cos(pitchMinus);
+        float z3 = R * (float) Math.sin(azimuthPlus) * (float) Math.cos(pitchMinus);
+        float y3 = R * (float) Math.sin(pitchMinus);
 
 
         float x4 = R * (float) Math.cos(azimuthPlus) * (float) Math.cos(pitchPlus);
@@ -223,16 +148,50 @@ public class Frame extends Shape{
         color[3] = colors[3];
     }
 
+    public void setStatusTexture(int status) {
+        bitmapChanged = true;
+        int idDrawable;
+        switch (status) {
+            case Constants.CONNECTED_STATUS:
+                idDrawable = R.drawable.device_icon_green;
+                break;
+            case Constants.DISCONNECTED_STATUS:
+                idDrawable = R.drawable.device_icon_red;
+                break;
+            case Constants.UNKNOWN_STATUS:
+                idDrawable = R.drawable.device_icon_black;
+                break;
+            default:
+                idDrawable = R.drawable.device_icon_white;
+                break;
+        }
+
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inScaled = false;   // No pre-scaling
+        bitmap = BitmapFactory.decodeResource(context.getResources(), idDrawable, options);  //Read in the resource
+    }
+
+    public void changeBitmap() {
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureDataHandle);
+        GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
+        bitmapChanged = false;
+    }
+
+
     public void draw(float[] mvpMatrix, GL10 gl) {
         GLES20.glUseProgram(mProgram);
+        if (bitmapChanged) {
+            changeBitmap();
+        }
+
         mPositionHandle = GLES20.glGetAttribLocation(mProgram, "vPosition");
 
         GLES20.glEnableVertexAttribArray(mPositionHandle);
 
-        GLES20.glVertexAttribPointer(mPositionHandle, COORDS_PER_VERTEX,
+        GLES20.glVertexAttribPointer(mPositionHandle, CORDS_PER_VERTEX,
                 GLES20.GL_FLOAT, false,
                 vertexStride, vertexBuffer);
-/////////////////////**********************************//////////
+
         textureCoordinateHandle = GLES20.glGetAttribLocation(mProgram, "a_TextureCoordinates");
         GLES20.glVertexAttribPointer(textureCoordinateHandle, 2, GLES20.GL_FLOAT, false,
                 0, textureBuffer);
@@ -244,13 +203,10 @@ public class Frame extends Shape{
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureDataHandle);
         GLES20.glUniform1i(textureUniformHandle, 0);
 
-        /////////************************//////////////////////////
-
 //        mColorHandle = GLES20.glGetUniformLocation(mProgram, "vColor");
 //        GLES20.glUniform4fv(mColorHandle, 1, color, 0);
         mMVPMatrixHandle = GLES20.glGetUniformLocation(mProgram, "uMVPMatrix");
         GLES20.glUniformMatrix4fv(mMVPMatrixHandle, 1, false, mvpMatrix, 0);
-
 
 
         gl.glDrawElements(GLES20.GL_TRIANGLES, drawOrder.length,
@@ -263,16 +219,11 @@ public class Frame extends Shape{
 
         this.azimuth = (float) azimuth;
         this.pitch = (float) pitch;
-
         float[] squareCords = this.getCordsFromAngle(azimuth, pitch);
         cubeTextureCoordinateData = this.getCordsFromAngle(azimuth, pitch);
 
-
-        System.arraycopy(squareCords, 0, aaa, 0, squareCords.length);
-        // initialize vertex byte buffer for shape coordinates
-        ByteBuffer bb = ByteBuffer.allocateDirect(
-                // (# of coordinate values * 4 bytes per float)
-                squareCords.length * 4);
+//        System.arraycopy(squareCords, 0, aaa, 0, squareCords.length);
+        ByteBuffer bb = ByteBuffer.allocateDirect(squareCords.length * 4);
         bb.order(ByteOrder.nativeOrder());
         vertexBuffer = bb.asFloatBuffer();
         vertexBuffer.put(squareCords);
@@ -281,8 +232,5 @@ public class Frame extends Shape{
 
     public void changeCords(double azimuth, double pitch) {
         this.prepareCords(azimuth, pitch);
-    }
-
-    public void invalidate() {
     }
 }

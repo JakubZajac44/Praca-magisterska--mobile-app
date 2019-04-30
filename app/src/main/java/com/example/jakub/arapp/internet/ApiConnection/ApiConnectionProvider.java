@@ -1,9 +1,9 @@
-package com.example.jakub.arapp.internet.backendConnection;
+package com.example.jakub.arapp.internet.ApiConnection;
 
 import dagger.Binds;
 import dagger.Module;
 
-public interface BackendConnectionProvider {
+public interface ApiConnectionProvider {
 
 
     String ACTION_INTERNET_DEVICE_LOADED =
@@ -20,7 +20,7 @@ public interface BackendConnectionProvider {
 
     void getInternetDevice();
 
-    void setUpListener(BackendConnectionListener listener);
+    void setUpListener(ApiConnectionListener listener);
 
     void removeListener();
 
@@ -29,6 +29,6 @@ public interface BackendConnectionProvider {
     abstract class BackendConnectionModule {
 
         @Binds
-        public abstract BackendConnectionProvider connectionProvider(BackendConnectionProviderImpl connectionProvider);
+        public abstract ApiConnectionProvider connectionProvider(ApiConnectionProviderImpl connectionProvider);
     }
 }

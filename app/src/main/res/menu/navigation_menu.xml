@@ -2,8 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/list_navigation"
-        android:icon="@drawable/list_icon_navigation_menu"
+        android:id="@+id/map_navigation"
+        android:icon="@drawable/map_icon_navigation"
         android:title="@string/list_navigation_title" />
     <item
         android:id="@+id/ar_navigation"
@@ -14,4 +14,8 @@
         android:id="@+id/ble_navigation"
         android:icon="@drawable/ble_icon_navigation_menu"
         android:title="@string/ble_navigation_title" />
+    <item
+        android:id="@+id/settings_navigation"
+        android:icon="@drawable/settings_icon_navigation"
+        android:title="@string/settings_navigation_title"/>
 </menu>

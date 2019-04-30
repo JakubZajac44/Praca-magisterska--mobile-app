@@ -15,9 +15,9 @@ public class ConfigApp {
     public static int PROFILE_DEV = 1;
     public static int PROFILE_PROD = 0;
 
-    public static String URL = "http://192.168.0.143:8081/";
+    public static String URL = "http://192.168.43.209:8082/";
 
-
+    public static String TOKEN = "";
     private int PROFILE ;
 
     private final String[] permissions = new String[]{

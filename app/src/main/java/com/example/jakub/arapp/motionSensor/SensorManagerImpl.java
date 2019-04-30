@@ -5,7 +5,6 @@ import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 
 import com.example.jakub.arapp.motionSensor.gyroFilter.GyroscopeFilterProvider;
 import com.example.jakub.arapp.motionSensor.sensorUtility.LowPassFilter;
@@ -13,7 +12,6 @@ import com.example.jakub.arapp.motionSensor.sensorUtility.Orientation3d;
 import com.example.jakub.arapp.utility.Logger;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 
 import io.reactivex.Observer;
@@ -23,9 +21,9 @@ import io.reactivex.subjects.PublishSubject;
 
 
 
-public class MySensorManagerImpl implements MySensorManager, SensorEventListener {
+public class SensorManagerImpl implements SensorManager, SensorEventListener {
 
-    public static final String TAG = MySensorManagerImpl.class.getSimpleName();
+    public static final String TAG = SensorManagerImpl.class.getSimpleName();
 
     private final int BUFFER_SIZE = 10000;
 
@@ -42,7 +40,7 @@ public class MySensorManagerImpl implements MySensorManager, SensorEventListener
     int axisY;
     Observer<Orientation3d> observer;
     PublishSubject<Orientation3d> ps = PublishSubject.create();
-    private SensorManager mSensorManager;
+    private android.hardware.SensorManager mSensorManager;
     private Sensor accelerometerSensor;
     private Sensor magneticFieldSensor;
     private Sensor gyroscopeSensor;
@@ -57,9 +55,9 @@ public class MySensorManagerImpl implements MySensorManager, SensorEventListener
 
 
     @Inject
-    public MySensorManagerImpl() {
-        axisX = SensorManager.AXIS_X;
-        axisY = SensorManager.AXIS_Z;
+    public SensorManagerImpl() {
+        axisX = android.hardware.SensorManager.AXIS_X;
+        axisY = android.hardware.SensorManager.AXIS_Z;
     }
 
     @Override
@@ -71,7 +69,7 @@ public class MySensorManagerImpl implements MySensorManager, SensorEventListener
     }
 
     public void prepareSensorManager() {
-        mSensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+        mSensorManager = (android.hardware.SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         this.checkIfGyroAvailable();
         this.iniSensor();
         ps.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(observer);
@@ -94,15 +92,15 @@ public class MySensorManagerImpl implements MySensorManager, SensorEventListener
     private void registerMotionListeners() {
         mSensorManager.registerListener(this,
                 accelerometerSensor,
-                SensorManager.SENSOR_DELAY_NORMAL);
+                android.hardware.SensorManager.SENSOR_DELAY_NORMAL);
 
         mSensorManager.registerListener(this,
                 magneticFieldSensor,
-                SensorManager.SENSOR_DELAY_NORMAL);
+                android.hardware.SensorManager.SENSOR_DELAY_NORMAL);
         if (isGyroAvailable) {
             mSensorManager.registerListener(this,
                     gyroscopeSensor,
-                    SensorManager.SENSOR_DELAY_NORMAL);
+                    android.hardware.SensorManager.SENSOR_DELAY_NORMAL);
         }
     }
 
@@ -145,12 +143,12 @@ public class MySensorManagerImpl implements MySensorManager, SensorEventListener
     }
 
     private void calculateAccMagOrientation() {
-        SensorManager.getRotationMatrix(rotationMatrix, null, accelerometerValues, magneticFieldValues);
+        android.hardware.SensorManager.getRotationMatrix(rotationMatrix, null, accelerometerValues, magneticFieldValues);
         if (isGyroAvailable) {
-            SensorManager.getOrientation(rotationMatrix, accMagOrientation);
+            android.hardware.SensorManager.getOrientation(rotationMatrix, accMagOrientation);
         } else {
-            SensorManager.remapCoordinateSystem(rotationMatrix, axisX, axisY, orientationValuesRemap);
-            SensorManager.getOrientation(orientationValuesRemap, accMagOrientation);
+            android.hardware.SensorManager.remapCoordinateSystem(rotationMatrix, axisX, axisY, orientationValuesRemap);
+            android.hardware.SensorManager.getOrientation(orientationValuesRemap, accMagOrientation);
             orientation3d = new Orientation3d(accMagOrientation[0], accMagOrientation[1], accMagOrientation[2]);
 
                 actualizeDevicePosition(orientation3d);

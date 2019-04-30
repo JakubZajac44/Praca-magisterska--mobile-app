@@ -11,21 +11,26 @@ import com.example.jakub.arapp.bluetooth.connectionManager.ConnectedBleDevicePro
 import com.example.jakub.arapp.bluetooth.scanningManager.BluetoothScannerManager;
 import com.example.jakub.arapp.dataBase.IoTDeviceDbModule;
 import com.example.jakub.arapp.gps.GpsProvider;
+import com.example.jakub.arapp.internet.ApiConnection.ApiConnectionProvider;
 import com.example.jakub.arapp.internet.api.InternetModule;
-import com.example.jakub.arapp.internet.backendConnection.BackendConnectionProvider;
-import com.example.jakub.arapp.motionSensor.MySensorManager;
+import com.example.jakub.arapp.motionSensor.SensorManager;
 import com.example.jakub.arapp.motionSensor.gyroFilter.GyroscopeFilterProvider;
 import com.example.jakub.arapp.notification.NotificationProvider;
 import com.example.jakub.arapp.page.arViewPage.ArContract;
 import com.example.jakub.arapp.page.arViewPage.ArFragment;
 import com.example.jakub.arapp.page.authPage.AuthContract;
-import com.example.jakub.arapp.page.authPage.AuthFragment;
+import com.example.jakub.arapp.page.authPage.AuthLoginFragment;
+import com.example.jakub.arapp.page.authPage.AuthReLoginFragment;
+import com.example.jakub.arapp.page.authPage.AuthRegisterFragment;
+import com.example.jakub.arapp.dialogFragment.fingerprintAuth.FingerPrintLoginDialog;
 import com.example.jakub.arapp.page.bluetoothDeviceListPage.BluetoothContract;
 import com.example.jakub.arapp.page.bluetoothDeviceListPage.BluetoothFragment;
 import com.example.jakub.arapp.page.mainArPage.MainArContract;
 import com.example.jakub.arapp.page.mainArPage.MainArFragment;
 import com.example.jakub.arapp.page.mapPage.MapContract;
 import com.example.jakub.arapp.page.mapPage.MapFragment;
+import com.example.jakub.arapp.page.settingsPage.SettingsContract;
+import com.example.jakub.arapp.page.settingsPage.SettingsFragment;
 import com.example.jakub.arapp.service.BluetoothService;
 
 import javax.inject.Singleton;
@@ -33,13 +38,13 @@ import javax.inject.Singleton;
 import dagger.Component;
 
 @Singleton
-@Component(modules = {AppModule.class, MySensorManager.MySensorManagerModule.class, ArContract.ArModule.class
+@Component(modules = {AppModule.class, SensorManager.MySensorManagerModule.class, ArContract.ArModule.class
         , GyroscopeFilterProvider.GyroscopeFilterModule.class, BluetoothScannerManager.BluetoothScannerManagerModule.class
         , BluetoothManagerModule.class, BluetoothContract.BluetoothModule.class, IoTDeviceDbModule.class
-        , MainArContract.ArSettingsModule.class, MapContract.ArSettingsModule.class, GpsProvider.GpsProviderModule.class
-        , NotificationProvider.NotificationProviderModule.class, BackendConnectionProvider.BackendConnectionModule.class
+        , MainArContract.ArSettingsModule.class, MapContract.MapModule.class, GpsProvider.GpsProviderModule.class
+        , NotificationProvider.NotificationProviderModule.class, ApiConnectionProvider.BackendConnectionModule.class
         , InternetModule.class, ConnectedBleDeviceProvider.ConnectedBleDeviceProviderModule.class
-        , ArManager.ArManagerProvider.class, AuthContract.AuthModule.class})
+        , ArManager.ArManagerProvider.class, AuthContract.AuthModule.class, SettingsContract.SettingsModule.class})
 public interface AppComponent {
 
     void inject(ArActivity arActivity);
@@ -62,6 +67,13 @@ public interface AppComponent {
 
     void inject(Scenario callback);
 
-    void inject(AuthFragment fragment);
+    void inject(AuthRegisterFragment fragment);
 
+    void inject(AuthLoginFragment fragment);
+
+    void inject(AuthReLoginFragment fragment);
+
+    void inject(SettingsFragment fragment);
+
+    void inject(FingerPrintLoginDialog dialog);
 }

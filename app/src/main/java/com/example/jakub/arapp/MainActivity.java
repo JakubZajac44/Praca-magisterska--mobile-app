@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.example.jakub.arapp.application.ConfigApp;
 import com.example.jakub.arapp.arEngine.ArActivity;
+import com.example.jakub.arapp.auth.AuthActivity;
 import com.example.jakub.arapp.broadcastReceiver.bluetooth.BleBroadcastReceiver;
 import com.example.jakub.arapp.broadcastReceiver.gps.GpsBroadcastReceiver;
 import com.example.jakub.arapp.broadcastReceiver.internet.InternetBroadcastReceiver;
@@ -24,6 +25,8 @@ import com.example.jakub.arapp.page.mainArPage.MainArContract;
 import com.example.jakub.arapp.page.mainArPage.MainArFragment;
 import com.example.jakub.arapp.page.mapPage.MapContract;
 import com.example.jakub.arapp.page.mapPage.MapFragment;
+import com.example.jakub.arapp.page.settingsPage.SettingsContract;
+import com.example.jakub.arapp.page.settingsPage.SettingsFragment;
 import com.example.jakub.arapp.service.BluetoothService;
 import com.example.jakub.arapp.utility.Constants;
 import com.example.jakub.arapp.utility.Logger;
@@ -71,11 +74,13 @@ public class MainActivity extends AppCompatActivity {
 
 
     Unbinder unbinder;
-    boolean doubleBackToExitPressedOnce = false;
+    private boolean doubleBackToExitPressedOnce = false;
+    private boolean isRunningWithoutLogin = false;
     private String currentFragmentTAG = "";
     private BluetoothContract.View bluetoothDeviceListFragment;
     private MainArContract.View mainArFragment;
-    private MapContract.View listDeviceFragment;
+    private MapContract.View mapFragment;
+    private SettingsContract.View settingsFragment;
     private List<String> listPermissionsNeeded;
     private BluetoothService bluetoothService;
     private ServiceConnection serviceConnection = new ServiceConnection() {
@@ -96,7 +101,8 @@ public class MainActivity extends AppCompatActivity {
     public MainActivity() {
         bluetoothDeviceListFragment = new BluetoothFragment();
         mainArFragment = new MainArFragment();
-        listDeviceFragment = new MapFragment();
+        mapFragment = new MapFragment();
+        settingsFragment = new SettingsFragment();
     }
 
     @Override
@@ -104,29 +110,33 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ((MyApplication) getApplication()).getAppComponent().inject(this);
-        logger.log(TAG,"onCreate");
+        isRunningWithoutLogin = sharedPreferences.getBoolean(Constants.RUNNING_WITHOUT_LOGIN, false);
         unbinder = ButterKnife.bind(this);
-        logger.log(TAG, "onCreate");
         listPermissionsNeeded = new ArrayList<>();
         this.setBottomNavigationListener();
         this.replaceFragment((Fragment) mainArFragment, MainArFragment.TAG);
         bottomNavigationView.setSelectedItemId(R.id.ar_navigation);
-        showPermissionRationale(configApp.getPermissions());
         this.createBluetoothService();
     }
 
-    private void setBottomNavigationListener(){
+    private void setBottomNavigationListener() {
         bottomNavigationView.setOnNavigationItemSelectedListener(menuItem -> {
 
             if (bottomNavigationView.getSelectedItemId() != menuItem.getItemId()) {
 
                 Fragment nextFragment = null;
                 String tag = "";
+                boolean fragmentShouldBeChanged = true;
 
                 switch (menuItem.getItemId()) {
-                    case R.id.list_navigation:
-                        nextFragment = (Fragment) listDeviceFragment;
-                        tag = MapFragment.TAG;
+                    case R.id.map_navigation:
+                        if (isRunningWithoutLogin) {
+                            fragmentShouldBeChanged = false;
+                            Toast.makeText(this, getResources().getString(R.string.running_without_login), Toast.LENGTH_SHORT).show();
+                        } else {
+                            nextFragment = (Fragment) mapFragment;
+                            tag = MapFragment.TAG;
+                        }
                         break;
 
                     case R.id.ar_navigation:
@@ -138,10 +148,13 @@ public class MainActivity extends AppCompatActivity {
                         nextFragment = (Fragment) bluetoothDeviceListFragment;
                         tag = BluetoothFragment.TAG;
                         break;
+                    case R.id.settings_navigation:
+                            nextFragment = (Fragment) settingsFragment;
+                            tag = SettingsFragment.TAG;
                 }
-                this.replaceFragment(nextFragment, tag);
+                if (fragmentShouldBeChanged) this.replaceFragment(nextFragment, tag);
 
-                return true;
+                return fragmentShouldBeChanged;
             } else return false;
         });
     }
@@ -155,19 +168,19 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onStart() {
-        logger.log(TAG,"onStart");
+        logger.log(TAG, "onStart");
         this.registerBroadcastReceiver();
         super.onStart();
     }
 
     @Override
     protected void onResume() {
-        logger.log(TAG,"onResume");
+        logger.log(TAG, "onResume");
         super.onResume();
     }
 
     private void registerBroadcastReceiver() {
-        this.registerReceiver(gpsReceiver,GpsBroadcastReceiver.makeGattUpdateIntentFilter());
+        this.registerReceiver(gpsReceiver, GpsBroadcastReceiver.makeGattUpdateIntentFilter());
         this.registerReceiver(bluetoothStateReceiver, BleBroadcastReceiver.makeGattUpdateIntentFilter());
         this.registerReceiver(internetReceiver, InternetBroadcastReceiver.makeGattUpdateIntentFilter());
     }
@@ -184,19 +197,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onPause() {
-        logger.log(TAG,"onPasue");
-        super.onPause();
-    }
-
-    @Override
     protected void onStop() {
-        logger.log(TAG,"onStop");
+        logger.log(TAG, "onStop");
         this.unregisterBroadcastReceiver();
         super.onStop();
     }
 
-    private void unregisterBroadcastReceiver(){
+    private void unregisterBroadcastReceiver() {
         unregisterReceiver(bluetoothStateReceiver);
         unregisterReceiver(gpsReceiver);
         unregisterReceiver(internetReceiver);
@@ -204,7 +211,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        logger.log(TAG,"onDestroy");
+        logger.log(TAG, "onDestroy");
         unbinder.unbind();
         this.unbindService(serviceConnection);
         this.destroyBluetoothService();
@@ -229,7 +236,12 @@ public class MainActivity extends AppCompatActivity {
     public void startNewActivity() {
         Intent myIntent = new Intent(MainActivity.this, ArActivity.class);
         MainActivity.this.startActivity(myIntent);
+    }
 
+    public void startAuthActivity() {
+        onDestroy();
+        Intent myIntent = new Intent(MainActivity.this, AuthActivity.class);
+        MainActivity.this.startActivity(myIntent);
     }
 
     public void repeatShowPermission() {

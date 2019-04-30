@@ -7,7 +7,7 @@ import dagger.Module;
 import io.reactivex.Observer;
 
 
-public interface MySensorManager {
+public interface SensorManager {
     void setListener(Observer<Orientation3d> observer);
 
     void removeListener();
@@ -16,7 +16,7 @@ public interface MySensorManager {
     @Module
     abstract class MySensorManagerModule {
         @Binds
-        public abstract MySensorManager mySensorManagerProvider(MySensorManagerImpl mySensorManager);
+        public abstract SensorManager mySensorManagerProvider(SensorManagerImpl mySensorManager);
     }
 
 
