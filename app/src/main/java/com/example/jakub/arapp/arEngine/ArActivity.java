@@ -14,10 +14,14 @@ import com.example.jakub.arapp.arEngine.model.Scenario;
 import com.example.jakub.arapp.arEngine.model.ScenarioListener;
 import com.example.jakub.arapp.arEngine.openGLprovider.MyGLSurfaceView;
 import com.example.jakub.arapp.arEngine.openGLprovider.MyRender;
+import com.example.jakub.arapp.arEngine.shape.BleDeviceShape;
+import com.example.jakub.arapp.arEngine.shape.InternetDeviceShape;
+import com.example.jakub.arapp.arEngine.shape.IotDeviceShape;
 import com.example.jakub.arapp.broadcastReceiver.bluetooth.BleBroadcastReceiver;
 import com.example.jakub.arapp.broadcastReceiver.gps.GpsBroadcastReceiver;
 import com.example.jakub.arapp.broadcastReceiver.internet.InternetBroadcastReceiver;
 import com.example.jakub.arapp.motionSensor.SensorManager;
+import com.example.jakub.arapp.motionSensor.gyroFilter.GyroscopeFilterProvider;
 import com.example.jakub.arapp.motionSensor.gyroFilter.GyroscopeFilterProviderImpl;
 import com.example.jakub.arapp.motionSensor.sensorUtility.Orientation3d;
 import com.example.jakub.arapp.page.arViewPage.ArContract;
@@ -25,6 +29,7 @@ import com.example.jakub.arapp.page.arViewPage.ArFragment;
 import com.example.jakub.arapp.service.BluetoothService;
 import com.example.jakub.arapp.utility.Constants;
 import com.example.jakub.arapp.utility.Logger;
+import com.example.jakub.arapp.utility.MathOperation;
 
 import java.util.Timer;
 
@@ -39,7 +44,7 @@ import butterknife.Unbinder;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
-public class ArActivity extends AppCompatActivity implements ScenarioListener {
+public class ArActivity extends AppCompatActivity implements ScenarioListener, IotTouchListener {
 
     public static final String TAG = ArActivity.class.getSimpleName();
     public static final int TIME_CONSTANT = 30;
@@ -50,7 +55,7 @@ public class ArActivity extends AppCompatActivity implements ScenarioListener {
     @Inject
     public SensorManager sensorManager;
     @Inject
-    public GyroscopeFilterProviderImpl gyroscopeFilterProviderImpl;
+    public GyroscopeFilterProvider gyroscopeFilterProviderImpl;
     @Inject
     public ArManager arManager;
     @Inject
@@ -68,7 +73,6 @@ public class ArActivity extends AppCompatActivity implements ScenarioListener {
     private MyGLSurfaceView myGlView;
     private Observer<Orientation3d> observer;
     private String currentFragmentTAG = "";
-    private MyRender myRender;
     private Unbinder unbinder;
     private Timer fuseTimer = new Timer();
     private ArContract.View arFragment;
@@ -84,7 +88,6 @@ public class ArActivity extends AppCompatActivity implements ScenarioListener {
         unbinder = ButterKnife.bind(this);
         mGLView = findViewById(R.id.glsurfaceView);
         if (isOpelGL20Available()) {
-//            myGlView = new MyGLSurfaceView(mGLView,arManager.getMyRender());
             fuseTimer.scheduleAtFixedRate(new GyroscopeFilterProviderImpl().new calculateFusedOrientationTask(),
                     1000, TIME_CONSTANT);
         } else {
@@ -102,7 +105,7 @@ public class ArActivity extends AppCompatActivity implements ScenarioListener {
     protected void onStart() {
         super.onStart();
         this.registerBroadcastReceiver();
-        arManager.setupListener();
+        arManager.setupListener(this);
 //        if(isScenarioReady)  myGlView = new MyGLSurfaceView(mGLView,arManager.getMyRender());
         if (isOpelGL20Available()) {
             if (observer == null) this.createObserver();
@@ -210,4 +213,28 @@ public class ArActivity extends AppCompatActivity implements ScenarioListener {
         isScenarioReady=true;
         myGlView = new MyGLSurfaceView(mGLView, arManager.createRender(scenario.getIotDevices()));
     }
+
+    @Override
+    public void iotDeviceTouched(IotDeviceShape device) {
+
+        if(device.getStatus()==Constants.CONNECTED_STATUS){
+            String  name;
+            if(device.getName().length()>13){
+                name  = device.getName().substring(0,10) + "..";
+            }else name = device.getName();
+            String sample = device.getSample();
+            String distance = "-";
+            if(device instanceof InternetDeviceShape){
+                InternetDeviceShape internetDevice = (InternetDeviceShape)device;
+                distance = MathOperation.numberToStringRound(internetDevice.getDistance(), 2);
+            }
+            arFragment.detailChangedText(name,sample,distance);
+        }else {
+            Toast.makeText(context,getString(R.string.device_disconnected),Toast.LENGTH_SHORT).show();
+        }
+
+
+    }
+
+
 }

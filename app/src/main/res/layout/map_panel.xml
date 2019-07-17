@@ -7,62 +7,89 @@
     android:layout_height="match_parent"
     android:background="@color/white">
 
-
-    <TextView
-        android:id="@+id/seekBarStatusTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="24dp"
-        android:text="TextView" />
-
-    <SeekBar
-        android:id="@+id/seekBarRadius"
-        android:layout_width="260dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="37dp"
-        android:max="100"
-        android:progress="30"
-        android:min="1" />
-
     <com.google.android.gms.maps.MapView
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
-        android:layout_height="514dp"
-        android:layout_above="@+id/saveInternetDeviceButton"
+        android:layout_height="546dp"
         android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
         tools:context=".MapsActivity" />
 
-    <Button
-        android:id="@+id/saveInternetDeviceButton"
-        android:layout_width="310dp"
-        android:layout_height="38dp"
+
+    <LinearLayout
+        android:layout_width="220dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="20dp"
-        android:text="Button" />
+        android:layout_marginBottom="99dp"
+        android:orientation="horizontal"
+        android:weightSum="4">
 
-    <Button
-        android:id="@+id/trackUserLocationButton"
-        android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/radiusTitleTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:text="@string/map_circle_radius"
+            android:textColor="@color/gray_text" />
+
+        <TextView
+            android:id="@+id/seekBarStatusTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@color/blue_text"
+
+            android:text="TextView" />
+
+
+    </LinearLayout>
+
+    <SeekBar
+        android:id="@+id/seekBarRadius"
+        android:layout_width="381dp"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/seekBarRadius"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="-91dp"
-        android:layout_marginBottom="88dp"
-        android:text="Button" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="70dp"
+        android:max="100"
+        android:min="1"
+        android:progress="30" />
 
-    <Button
+    <ImageButton
+        android:id="@+id/trackUserLocationButton"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignBottom="@+id/map"
+        android:layout_alignEnd="@+id/seekBarRadius"
+        android:background="@drawable/rectangle_with_border"
+        android:src="@drawable/current_location_follow" />
+
+
+
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/saveRatioButton"
-        android:layout_width="101dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
+        android:layout_width="250dp"
+        android:layout_height="60dp"
         android:layout_alignParentTop="true"
-        android:layout_marginEnd="14dp"
-        android:layout_marginTop="20dp"
-        android:text="Button" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="90dp"
+        android:text="@string/save_ratio"
+        android:visibility="invisible"
+        app:cornerRadius="15dp"/>
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/saveInternetDeviceButton"
+        android:layout_width="250dp"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
+        android:text="@string/save_iot_device_map"
+        app:cornerRadius="15dp" />
+
+
+
 </RelativeLayout>

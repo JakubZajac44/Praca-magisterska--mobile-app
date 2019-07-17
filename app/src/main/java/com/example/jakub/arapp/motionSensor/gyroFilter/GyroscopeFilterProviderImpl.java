@@ -102,8 +102,8 @@ public class GyroscopeFilterProviderImpl implements GyroscopeFilterProvider {
 //        axisX = SensorManager.AXIS_X;
 //        axisY = SensorManager.AXIS_Z;
 
-        axisX = android.hardware.SensorManager.AXIS_X;
-        axisY = android.hardware.SensorManager.AXIS_Z;
+        axisX = android.hardware.SensorManager.AXIS_MINUS_X;
+        axisY = android.hardware.SensorManager.AXIS_MINUS_Z;
 
         android.hardware.SensorManager.getRotationMatrixFromVector(deltaMatrix, deltaVector);
         gyroMatrix = matrixMultiplication(gyroMatrix, deltaMatrix);

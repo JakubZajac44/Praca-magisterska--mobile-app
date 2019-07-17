@@ -14,6 +14,10 @@ public class BleDeviceWrapper extends IoTDevice{
     @Setter
     private String address;
 
+    @Getter
+    @Setter
+    private int type;
+
 
     private BluetoothDevice bluetoothDevice;
 

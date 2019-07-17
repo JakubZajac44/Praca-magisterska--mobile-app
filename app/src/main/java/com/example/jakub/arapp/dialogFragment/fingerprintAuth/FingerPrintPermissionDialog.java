@@ -10,6 +10,7 @@ import android.view.WindowManager;
 
 import com.example.jakub.arapp.R;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -24,6 +25,11 @@ public class FingerPrintPermissionDialog extends DialogFragment {
     private Unbinder unbinder;
     private boolean isDismissed;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setStyle(DialogFragment.STYLE_NO_FRAME,0);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -40,9 +46,10 @@ public class FingerPrintPermissionDialog extends DialogFragment {
     }
 
     private void setDialogProperties() {
-        ViewGroup.LayoutParams params = getDialog().getWindow().getAttributes();
-        params.width = WindowManager.LayoutParams.MATCH_PARENT;
-        getDialog().getWindow().setAttributes((WindowManager.LayoutParams) params);
+        WindowManager.LayoutParams params = getDialog().getWindow().getAttributes();
+        params.dimAmount = 0.8f;
+        getDialog().getWindow().setAttributes(params);
+        getDialog().getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
     }
 
     @OnClick(R.id.fingerprintAuthYesButton)

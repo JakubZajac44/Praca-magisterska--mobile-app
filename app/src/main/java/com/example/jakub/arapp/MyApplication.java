@@ -8,9 +8,9 @@ import com.example.jakub.arapp.application.AppModule;
 
 import com.example.jakub.arapp.application.ConfigApp;
 import com.example.jakub.arapp.application.DaggerAppComponent;
-import com.example.jakub.arapp.auth.AuthActivity;
+import com.example.jakub.arapp.authManager.AuthActivity;
 import com.example.jakub.arapp.dataBase.IoTDeviceDbModule;
-import com.example.jakub.arapp.internet.api.InternetModule;
+import com.example.jakub.arapp.internetManager.api.InternetModule;
 
 
 public class MyApplication extends Application {
@@ -18,7 +18,6 @@ public class MyApplication extends Application {
     private AppComponent appComponent;
 
     public static final String TAG = AuthActivity.class.getSimpleName();
-
 
     @Override
     public void onCreate() {
@@ -31,14 +30,8 @@ public class MyApplication extends Application {
 
     }
 
-
-
     public AppComponent getAppComponent(){
         return appComponent;
     }
-
-
-
-
 
 }

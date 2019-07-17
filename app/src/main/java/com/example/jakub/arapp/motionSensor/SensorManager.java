@@ -9,7 +9,6 @@ import io.reactivex.Observer;
 
 public interface SensorManager {
     void setListener(Observer<Orientation3d> observer);
-
     void removeListener();
     void actualizeDevicePosition(Orientation3d orientation3d);
 
@@ -18,6 +17,4 @@ public interface SensorManager {
         @Binds
         public abstract SensorManager mySensorManagerProvider(SensorManagerImpl mySensorManager);
     }
-
-
 }

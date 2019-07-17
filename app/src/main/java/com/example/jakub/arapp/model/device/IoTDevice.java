@@ -13,11 +13,4 @@ public abstract class IoTDevice {
     @Getter
     @Setter
     protected String sample;
-//    @Getter
-//    @Setter
-//    protected float azimuth;
-//    @Getter
-//    @Setter
-//    protected float pitch;
-
 }

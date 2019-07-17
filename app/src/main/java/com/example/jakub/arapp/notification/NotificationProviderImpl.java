@@ -38,7 +38,7 @@ public class NotificationProviderImpl implements NotificationProvider {
         notificationManager.createNotificationChannel(channel);
 
         Notification.Builder builder = new Notification.Builder(context, CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_ble_notification)
+                .setSmallIcon(R.drawable.logo_globar_color)
                 .setContentText(Utils.getCharSequence(notificationText))
                 .setContentTitle(context.getResources().getString(R.string.notification_title))
                 .setAutoCancel(true)

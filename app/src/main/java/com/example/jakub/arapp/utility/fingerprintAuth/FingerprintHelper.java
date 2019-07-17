@@ -93,6 +93,7 @@ public class FingerprintHelper {
                 this.isAuth = authStatus);
     }
 
+
     @RequiresApi(api = Build.VERSION_CODES.M)
     public void startFingerPrintAuth() {
         if (this.isFingerprintAvailable) {

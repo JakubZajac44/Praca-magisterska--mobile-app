@@ -10,7 +10,7 @@ import dagger.Module;
 
 public interface ArManager {
 
-    void setupListener();
+    void setupListener(IotTouchListener listener);
 
     void removeListener();
 

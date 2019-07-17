@@ -2,20 +2,22 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 
     android:id="@+id/constraintLayout"
-    android:layout_width="match_parent"
+    android:layout_width="400dp"
     android:layout_height="wrap_content"
+    android:background="@drawable/dialog_curved"
     android:padding="20dp">
 
 
     <ImageButton
         android:id="@+id/closeDialogFragmentButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
-        android:layout_marginEnd="24dp"
-        android:layout_marginTop="25dp"
-        android:background="@color/black"
+        android:layout_marginEnd="0dp"
+        android:layout_marginTop="0dp"
+        android:scaleType="fitCenter"
+        android:background="@color/transparent"
         android:src="@drawable/close_icon_white" />
 
     <TextView
@@ -25,7 +27,9 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="200dp"
+        android:textSize="18sp"
         android:gravity="center"
+        android:textColor="@color/white"
         android:text="@string/loginFingerprintText" />
 
     <ImageView
@@ -33,6 +37,6 @@
         android:layout_width="139dp"
         android:layout_height="152dp"
         android:layout_centerInParent="true"
-        android:src="@drawable/finger_pring_red" />
+        android:src="@drawable/finger_print_white" />
 
 </RelativeLayout>

@@ -46,7 +46,7 @@ public class Frame extends ShapeSquare {
     private int textureUniformHandle;
     private int textureCoordinateHandle;
 
-    public Frame(Context context, double azimuth, double pitch) {
+    public Frame(Context context, double azimuth, double pitch, int type) {
         this.context = context;
 //        this.setColor(Constants.WHITE_COLOR);
 //        this.setStatusTexture(Constants.UNKNOWN_STATUS);
@@ -65,7 +65,10 @@ public class Frame extends ShapeSquare {
         textureBuffer.put(textureCoordinates);
         textureBuffer.position(0);
 
-        textureDataHandle = this.loadTexture(context, R.drawable.device_icon_green);
+        if (type == Constants.SERVER_DEVICE)
+            textureDataHandle = this.loadTexture(context, R.drawable.iot_ser_green);
+        else if (type == Constants.BLE_DEVICE)
+            textureDataHandle = this.loadTexture(context, R.drawable.iot_ble_green);
         int vertexShader = MyRender.loadShader(GLES20.GL_VERTEX_SHADER,
                 vertexShaderCodee);
         int fragmentShader = MyRender.loadShader(GLES20.GL_FRAGMENT_SHADER,
@@ -148,21 +151,21 @@ public class Frame extends ShapeSquare {
         color[3] = colors[3];
     }
 
-    public void setStatusTexture(int status) {
+    public void setStatusTexture(int status, int type) {
         bitmapChanged = true;
-        int idDrawable;
+        int idDrawable = 0;
         switch (status) {
             case Constants.CONNECTED_STATUS:
-                idDrawable = R.drawable.device_icon_green;
+                if (type == Constants.BLE_DEVICE) idDrawable = R.drawable.iot_ble_green;
+                else if (type == Constants.SERVER_DEVICE) idDrawable = R.drawable.iot_ser_green;
                 break;
             case Constants.DISCONNECTED_STATUS:
-                idDrawable = R.drawable.device_icon_red;
-                break;
-            case Constants.UNKNOWN_STATUS:
-                idDrawable = R.drawable.device_icon_black;
+                if (type == Constants.BLE_DEVICE) idDrawable = R.drawable.iot_ble_red;
+                else if (type == Constants.SERVER_DEVICE) idDrawable = R.drawable.iot_ser_red;
                 break;
             default:
-                idDrawable = R.drawable.device_icon_white;
+                if (type == Constants.BLE_DEVICE) idDrawable = R.drawable.iot_ble_gray;
+                else if (type == Constants.SERVER_DEVICE) idDrawable = R.drawable.iot_ser_gray;
                 break;
         }
 
@@ -172,9 +175,12 @@ public class Frame extends ShapeSquare {
     }
 
     public void changeBitmap() {
-        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureDataHandle);
-        GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
-        bitmapChanged = false;
+        if (bitmap != null) {
+            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureDataHandle);
+            GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
+            bitmapChanged = false;
+        }
+        ;
     }
 
 

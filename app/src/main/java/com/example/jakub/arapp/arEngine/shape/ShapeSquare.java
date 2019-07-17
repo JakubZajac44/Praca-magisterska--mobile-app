@@ -23,9 +23,9 @@ public abstract class ShapeSquare {
     protected float[] mModelMatrix = new float[16];
     protected float[] cubeTextureCoordinateData;
     protected float textureCoordinates[] = {0.0f, 0.0f, //
-            1.0f, 0.0f, //
-            1.0f, 1.0f, //
             0.0f, 1.0f, //
+            1.0f, 1.0f, //
+            1.0f, 0.0f, //
     };
 
     float color[] = new float[4];

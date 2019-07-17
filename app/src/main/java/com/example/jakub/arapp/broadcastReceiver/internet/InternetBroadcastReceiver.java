@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 
 import com.example.jakub.arapp.model.device.InternetDeviceWrapper;
-import com.example.jakub.arapp.internet.ApiConnection.ApiConnectionProvider;
+import com.example.jakub.arapp.internetManager.apiConnection.ApiConnectionProvider;
 import com.example.jakub.arapp.utility.Logger;
 
 import java.util.List;

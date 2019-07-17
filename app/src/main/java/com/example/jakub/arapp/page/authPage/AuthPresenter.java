@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 
 import com.example.jakub.arapp.R;
 import com.example.jakub.arapp.application.ConfigApp;
-import com.example.jakub.arapp.internet.api.ApiConnection;
+import com.example.jakub.arapp.internetManager.api.ApiConnection;
 import com.example.jakub.arapp.model.User;
 import com.example.jakub.arapp.utility.Constants;
 import com.example.jakub.arapp.utility.Logger;
@@ -108,7 +108,7 @@ public class AuthPresenter implements AuthContract.Presenter {
 
     @Override
     public void saveUserCredentials(User user) {
-        editor.putBoolean(Constants.ACCOUNT_REGISTRATION_STATUS_KEY, true);
+
         Encrypt encrypt = new Encrypt();
         try {
             byte[] IV;
@@ -129,6 +129,7 @@ public class AuthPresenter implements AuthContract.Presenter {
 
     @Override
     public void savePin(String pin) {
+        editor.putBoolean(Constants.ACCOUNT_REGISTRATION_STATUS_KEY, true);
         try {
             Encrypt encrypt = new Encrypt();
             byte[] IV;

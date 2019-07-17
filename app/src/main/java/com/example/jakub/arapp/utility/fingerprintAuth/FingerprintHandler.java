@@ -43,7 +43,6 @@ public class FingerprintHandler extends AuthenticationCallback {
     @Override
     public void onAuthenticationSucceeded(FingerprintManager.AuthenticationResult result) {
         super.onAuthenticationSucceeded(result);
-
         fingerprintHelper.setAuth(true);
         cancellationSignal.cancel();
     }
@@ -51,6 +50,7 @@ public class FingerprintHandler extends AuthenticationCallback {
     @Override
     public void onAuthenticationFailed() {
         super.onAuthenticationFailed();
+        fingerprintHelper.setAuth(false);
         Toast.makeText(mContext,mContext.getString(R.string.fingerprintNotRecognized),Toast.LENGTH_SHORT).show();
     }
 

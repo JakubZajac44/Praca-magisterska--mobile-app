@@ -4,14 +4,16 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.jakub.arapp.MyApplication;
 import com.example.jakub.arapp.R;
-import com.example.jakub.arapp.auth.AuthActivity;
+import com.example.jakub.arapp.authManager.AuthActivity;
 import com.example.jakub.arapp.dialogFragment.fingerprintAuth.FingerPrintLoginDialog;
 import com.example.jakub.arapp.utility.fingerprintAuth.FingerprintHelper;
 import com.example.jakub.arapp.utility.Constants;
@@ -50,6 +52,12 @@ public class AuthLoginFragment extends Fragment implements AuthContract.LoginVie
     @BindView(R.id.pinText)
     EditText userPinText;
 
+    @BindView(R.id.notLoginLayout)
+    LinearLayout notLoginLayout;
+
+    @BindView(R.id.reLoginLayout)
+    LinearLayout reLoginLayout;
+
     private Unbinder unbinder;
 
     @Override
@@ -65,6 +73,15 @@ public class AuthLoginFragment extends Fragment implements AuthContract.LoginVie
         View view = inflater.inflate(R.layout.auth_login_fragment, container, false);
         presenter.attachView(this);
         unbinder = ButterKnife.bind(this, view);
+        notLoginLayout.setOnTouchListener((v, event) -> {
+            setRunningStatus(true);
+            startMainActivity();
+            return false;
+        });
+        reLoginLayout.setOnTouchListener((v, event) -> {
+            ((AuthActivity)getActivity()).showReLoginFragment();
+            return false;
+        });
         return view;
     }
 
@@ -74,16 +91,6 @@ public class AuthLoginFragment extends Fragment implements AuthContract.LoginVie
         this.showFingerPrintDialog();
     }
 
-    @OnClick(R.id.reloginButton2)
-    public void reLoginUser() {
-        ((AuthActivity)getActivity()).showReLoginFragment();
-    }
-
-    @OnClick(R.id.notLoginButton)
-    public void runWithoutLogin() {
-        setRunningStatus(true);
-        startMainActivity();
-    }
 
     private void setRunningStatus(boolean status) {
         editor.putBoolean(Constants.RUNNING_WITHOUT_LOGIN, status);
@@ -96,7 +103,7 @@ public class AuthLoginFragment extends Fragment implements AuthContract.LoginVie
         presenter.loginUserPin(pin);
     }
 
-    @OnClick(R.id.fingerprintButton)
+
     public void showFingerPrintDialog() {
 
         boolean isFingerprintAvailable = fingerprintHelper.checkFingerprintStatus();

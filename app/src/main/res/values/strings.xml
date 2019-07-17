@@ -3,7 +3,7 @@
     <string name="text_location_permission">Aplikacja do działania potrzebuje uprawnień gps, tak aby poprawnie mogła wspomagać Twój trening.</string>
     <string name="ok">Ok</string>
 
-    <string name="app_name">ArApp</string>
+    <string name="app_name">GlobAR</string>
     <string name="azimuth_text">Azymut:</string>
     <string name="pitch_text">Pułap:</string>
     <string name="ble_not_supported">Bluetooth LE not suported</string>
@@ -27,7 +27,7 @@
 
     <string name="markerListTextView">Lista znacznikow</string>
     <string name="seekBarStatusActive">Promien obszaru wynosi:</string>
-    <string name="seekBarStatusNonactive">Dotknij mape, aby wybrac miejsce obszaru</string>
+    <string name="seekBarStatusNonactive">Wybierz miejsce na mapie</string>
     <string name="sample_text">Odczyt</string>
     <string name="time_sample_text">data</string>
     <string name="error_backend_connection">Brak połączenia z serwerem</string>
@@ -47,10 +47,33 @@
     <string name="running_without_login">Opcja dostępna dla zalogowanych użytkowników!</string>
     <string name="registration_summary_settings">Pamiętaj że tylko zalogowni użytkownicy mają dostęp do wszystkich funkcji aplikacji.</string>
     <string name="log_out">Wyloguj</string>
+    <string name="save">Zapisz</string>
 
     <string name="fingerprintNotRecognized">Spróbuj ponownie</string>
     <string name="loginFingerprintText">Przyłóż palec aby sie zalogować</string>
     <string name="yes_text">Tak</string>
     <string name="no_text">Nie</string>
     <string name="fingerprint_summary_settings">Opcja ta pozwala na logowanie za pomocą odcisku palca.</string>
+    <string name="pin_hint">PIN</string>
+    <string name="name_hint">Nazwa użytkownika</string>
+    <string name="password_hint">Hasło</string>
+    <string name="double_click_text">Dotknij ponownie aby wyjść</string>
+    <string name="auth_without_login">Wejdź bez logowania</string>
+    <string name="finger_print_auth_permission">Czy chcesz logowac sie przy pomocy odcisku palca?</string>
+    <string name="login">Zaloguj</string>
+    <string name="register">Załóż konto</string>
+    <string name="open_ar_view">Przejdź do widoku AR</string>
+    <string name="save_iot_device_map">Zapisz wybrane urządzenia IoT</string>
+    <string name="save_ratio">Zapamiętaj obszar</string>
+    <string name="distance_iot">Dystans: </string>
+    <string name="sample_iot">Odczyt: </string>
+    <string name="iot_name">Nazwa:</string>
+    <string name="device_disconnected">Brak połączenia z urządzniem!</string>
+    <string name="relogin_user">Wybierz inne konto</string>
+    <string name="or">lub</string>
+    <string name="have_account">Mam już konto</string>
+    <string name="map_circle_radius">Promień obszaru wynosi</string>
+    <string name="pin_dialog_text">Wpisz kod PIN, którym będziesz się logował</string>
+
+
 </resources>

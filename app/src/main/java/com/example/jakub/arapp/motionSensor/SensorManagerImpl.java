@@ -150,14 +150,14 @@ public class SensorManagerImpl implements SensorManager, SensorEventListener {
             android.hardware.SensorManager.remapCoordinateSystem(rotationMatrix, axisX, axisY, orientationValuesRemap);
             android.hardware.SensorManager.getOrientation(orientationValuesRemap, accMagOrientation);
             orientation3d = new Orientation3d(accMagOrientation[0], accMagOrientation[1], accMagOrientation[2]);
-
                 actualizeDevicePosition(orientation3d);
         }
     }
 
+    @Override
     public void actualizeDevicePosition(Orientation3d orientation3d) {
+        logger.log(TAG,String.valueOf(orientation3d.getAzimuthDegrees())+" "+String.valueOf(orientation3d.getPitchDegrees())+" "+String.valueOf(orientation3d.getRollDegrees()));
         ps.onNext(orientation3d);
-
     }
 
 }

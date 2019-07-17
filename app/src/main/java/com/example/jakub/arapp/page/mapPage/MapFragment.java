@@ -70,6 +70,9 @@ public class MapFragment extends Fragment implements MapContract.View, OnMapRead
     @BindView(R.id.seekBarStatusTextView)
     TextView seekBarStatusTextView;
 
+    @BindView(R.id.radiusTitleTextView)
+    TextView radiusTitleTextView;
+
     private Unbinder unbinder;
     private GoogleMap mMap;
     private SupportMapFragment supportMapFragment;
@@ -169,7 +172,6 @@ public class MapFragment extends Fragment implements MapContract.View, OnMapRead
     }
 
 
-
     private void renderCircle() {
         if (circle != null) circle.remove();
         this.drawCircle();
@@ -213,7 +215,9 @@ public class MapFragment extends Fragment implements MapContract.View, OnMapRead
 
     @OnClick(R.id.saveInternetDeviceButton)
     public void saveInternetDevice() {
+        saveCircleDetailsButton();
         presenter.saveDeviceInCircle(this.currentRadius, MathOperation.getLocation(currentCircleLocation));
+
     }
 
     @OnClick(R.id.trackUserLocationButton)
@@ -222,7 +226,6 @@ public class MapFragment extends Fragment implements MapContract.View, OnMapRead
         else trackingUserLocation = true;
     }
 
-    @OnClick(R.id.saveRatioButton)
     public void saveCircleDetailsButton() {
         Gson gson = new Gson();
         MapCircle mapCircle = new MapCircle(circle.getCenter(), (int) circle.getRadius());
@@ -247,17 +250,24 @@ public class MapFragment extends Fragment implements MapContract.View, OnMapRead
     private void addUserMarker() {
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(new LatLng(this.currentUserLocation.getLatitude(), this.currentUserLocation.getLongitude()));
+        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.user_position));
         currentLocationMarker = mMap.addMarker(markerOptions);
     }
 
     private void setSeekBarStatusText(boolean seekBarStatus) {
         String text;
+        String text2;
         if (seekBarStatus) {
-            text = context.getResources().getString(R.string.seekBarStatusActive);
-            text += String.valueOf(currentRadius / 1000);
+            text = String.valueOf(currentRadius / 1000);
             text += " km.";
-        } else text = context.getResources().getString(R.string.seekBarStatusNonactive);
+            text2 = context.getResources().getString(R.string.map_circle_radius);
+        } else{
+            text = "-";
+            text2 = context.getResources().getString(R.string.seekBarStatusNonactive);
+
+        }
         seekBarStatusTextView.setText(text);
+        radiusTitleTextView.setText(text2);
     }
 
     @Override
@@ -266,7 +276,7 @@ public class MapFragment extends Fragment implements MapContract.View, OnMapRead
         for(InternetDeviceWrapper device:internetDeviceWrappers){
             MarkerOptions markerOptions = new MarkerOptions();
             markerOptions.position(new LatLng(device.getLat(), device.getLon()))
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.iot_sensor_icon))
                     .title(device.getName()+ String.valueOf(device.getId()))
                     .snippet("Odczyt: "+device.getSample());
             Marker marker = mMap.addMarker(markerOptions);

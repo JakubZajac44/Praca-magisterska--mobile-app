@@ -31,6 +31,7 @@ public class GpsProviderImpl implements GpsProvider {
     @Inject
     Logger logger;
 
+    private String providerGPS;
 
     Observer<Location> observer;
     PublishSubject<Location> ps = PublishSubject.create();
@@ -39,7 +40,7 @@ public class GpsProviderImpl implements GpsProvider {
         @Override
         public void onLocationChanged(Location location) {
            ps.onNext(location);
-            logger.log(TAG, "updateLocation");
+           logger.log(TAG, "updateLocation");
         }
 
         @Override
@@ -55,8 +56,6 @@ public class GpsProviderImpl implements GpsProvider {
         public void onProviderDisabled(String provider) {
         }
     };
-    private String providerGPS;
-
 
     @Inject
     public GpsProviderImpl() {

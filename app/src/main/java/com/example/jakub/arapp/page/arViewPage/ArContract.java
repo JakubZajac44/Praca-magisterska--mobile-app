@@ -11,6 +11,8 @@ public interface ArContract {
 
         boolean isVisible();
         void orientationChangedText(Orientation3d newOrientation);
+
+        void detailChangedText(String name, String sample, String distance);
     }
 
     interface Presenter {

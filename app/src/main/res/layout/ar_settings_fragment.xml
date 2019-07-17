@@ -43,14 +43,15 @@
         android:layout_marginBottom="80dp"
         android:background="@color/black" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/startArViewButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="250dp"
+        android:layout_height="60dp"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="15dp"
-        android:text="Ar loginView" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
+        android:text="@string/open_ar_view"
+        app:cornerRadius="15dp" />
 
 
 </RelativeLayout>

@@ -14,13 +14,13 @@ import android.os.Message;
 import android.util.Log;
 
 import com.example.jakub.arapp.MyApplication;
-import com.example.jakub.arapp.bluetooth.connectionManager.ConnectedBleDevice;
-import com.example.jakub.arapp.bluetooth.connectionManager.ConnectedBleDeviceProvider;
+import com.example.jakub.arapp.bluetoothManager.connectionManager.ConnectedBleDevice;
+import com.example.jakub.arapp.bluetoothManager.connectionManager.ConnectedBleDeviceProvider;
 import com.example.jakub.arapp.dataBase.data.ble.BleDevice;
 import com.example.jakub.arapp.dataBase.repository.ble.BleDeviceRepository;
 import com.example.jakub.arapp.gps.GpsProvider;
-import com.example.jakub.arapp.internet.ApiConnection.ApiConnectionListener;
-import com.example.jakub.arapp.internet.ApiConnection.ApiConnectionProvider;
+import com.example.jakub.arapp.internetManager.apiConnection.ApiConnectionListener;
+import com.example.jakub.arapp.internetManager.apiConnection.ApiConnectionProvider;
 import com.example.jakub.arapp.model.device.InternetDeviceWrapper;
 import com.example.jakub.arapp.notification.NotificationProvider;
 import com.example.jakub.arapp.notification.NotificationProviderImpl;
@@ -103,6 +103,9 @@ public class BluetoothService extends Service
                         }
                     });
            if(!isRunningWithoutLogin) apiConnectionProvider.getInternetDevice();
+
+
+
         }
 
         private void tryConnectToBleDevice(List<BleDevice> bleDevices) {

@@ -9,11 +9,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.jakub.arapp.MyApplication;
 import com.example.jakub.arapp.R;
-import com.example.jakub.arapp.auth.AuthActivity;
+import com.example.jakub.arapp.authManager.AuthActivity;
 import com.example.jakub.arapp.dialogFragment.PinDialog;
 import com.example.jakub.arapp.dialogFragment.fingerprintAuth.FingerPrintPermissionDialog;
 import com.example.jakub.arapp.model.User;
@@ -31,9 +32,9 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-public class AuthReLoginFragment extends Fragment implements AuthContract.ReLoginView {
+public class AuthReloginFragment extends Fragment implements AuthContract.ReLoginView {
 
-    public static final String TAG = AuthReLoginFragment.class.getSimpleName();
+    public static final String TAG = AuthReloginFragment.class.getSimpleName();
     public static final int DIALOG_FRAGMENT = 1;
 
     @Inject
@@ -55,6 +56,12 @@ public class AuthReLoginFragment extends Fragment implements AuthContract.ReLogi
     private Unbinder unbinder;
     private User user;
 
+    @BindView(R.id.reLoginRegisterLayout)
+    LinearLayout reLoginRegisterLayout;
+
+    @BindView(R.id.reNotLoginLayout)
+    LinearLayout reNotLoginLayout;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,10 +74,17 @@ public class AuthReLoginFragment extends Fragment implements AuthContract.ReLogi
         View view = inflater.inflate(R.layout.auth_re_login_fragment, container, false);
         presenter.attachView(this);
         unbinder = ButterKnife.bind(this, view);
+        reLoginRegisterLayout.setOnTouchListener((v, event) -> {
+           showRegistrationFragment();
+            return false;
+        });
+        reNotLoginLayout.setOnTouchListener((v, event) -> {
+            runWithoutLogin();
+            return false;
+        });
         return view;
     }
 
-    @OnClick(R.id.reNotLoginButton)
     public void runWithoutLogin() {
         setRunningStatus(true);
         startMainActivity();
@@ -83,7 +97,6 @@ public class AuthReLoginFragment extends Fragment implements AuthContract.ReLogi
         presenter.reLoginUser(name, password);
     }
 
-    @OnClick(R.id.reLoginRegisterButton)
     public void showRegistrationFragment() {
         ((AuthActivity) getActivity()).showRegistrationFragment();
     }

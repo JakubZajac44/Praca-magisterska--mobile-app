@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.EditText;
 
 import com.example.jakub.arapp.R;
@@ -30,7 +31,7 @@ public class PinDialog extends DialogFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setStyle(DialogFragment.STYLE_NO_FRAME,0);
     }
 
     @Nullable
@@ -42,6 +43,19 @@ public class PinDialog extends DialogFragment {
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        this.setDialogProperties();
+    }
+
+    private void setDialogProperties() {
+        WindowManager.LayoutParams params = getDialog().getWindow().getAttributes();
+        params.dimAmount = 0.8f;
+        getDialog().getWindow().setAttributes(params);
+        getDialog().getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+    }
 
     @OnClick(R.id.confirmSavePinButton)
     public void confirmSavePinButton(){

@@ -26,4 +26,7 @@ public interface InternetDeviceDao {
 
     @Delete
     void removeDevices(List<InternetDevice> internetDevice);
+
+    @Query("DELETE FROM internet_device")
+    void remobeAll();
 }

@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="400dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="10dp">
+    android:background="@drawable/dialog_curved"
+    android:padding="20dp">
 
     <TextView
         android:id="@+id/simpleDialogFragmentText"
@@ -11,6 +13,8 @@
         android:layout_height="wrap_content"
         android:text="@string/deleteFromDbDialogTitle"
         android:textSize="20sp"
+        android:gravity="center"
+        android:textColor="@color/white"
         android:padding="5dp"/>
 
     <LinearLayout
@@ -20,12 +24,15 @@
 
         android:weightSum="5">
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/yesSimpleDialogButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
             android:text="@string/yes"
+            android:textColor="@color/blue_text"
+            android:theme="@style/MyButtonStyleWhite"
+            app:cornerRadius="15dp"
             />
 
         <View
@@ -33,11 +40,14 @@
             android:layout_height="5dp"
             android:layout_weight="1" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/noSimpleDialogButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:text="@string/no" />
+            android:text="@string/no"
+            android:textColor="@color/blue_text"
+            android:theme="@style/MyButtonStyleWhite"
+            app:cornerRadius="15dp"/>
     </LinearLayout>
 </LinearLayout>

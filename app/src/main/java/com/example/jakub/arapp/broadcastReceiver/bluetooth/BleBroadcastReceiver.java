@@ -5,7 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 
-import com.example.jakub.arapp.bluetooth.connectionManager.ConnectedBleDeviceProvider;
+import com.example.jakub.arapp.bluetoothManager.connectionManager.ConnectedBleDeviceProvider;
+import com.example.jakub.arapp.model.IoTDeviceDetails;
 import com.example.jakub.arapp.utility.Constants;
 import com.example.jakub.arapp.utility.Logger;
 
@@ -52,11 +53,48 @@ public class BleBroadcastReceiver extends BroadcastReceiver {
                 break;
             case ConnectedBleDeviceProvider.ACTION_NEW_DATA_AVAILABLE:
                 String data = intent.getStringExtra(ConnectedBleDeviceProvider.NEW_DATA_KEY);
-                this.changeBleDeviceData(address,data);
+                IoTDeviceDetails iotDevice = this.extractDetails(data);
+                this.changeBleDeviceData(address,iotDevice);
                 logger.log(TAG,"Device: "+address+", value: "+data);
 
                 break;
         }
+    }
+
+    private IoTDeviceDetails extractDetails(String data) {
+        logger.log(TAG,data);
+        IoTDeviceDetails deviceDetails = new IoTDeviceDetails();
+        deviceDetails.setAzimuth(Float.parseFloat(data.substring(0,3)));
+        deviceDetails.setPitch(Float.parseFloat(data.substring(3,6)));
+        deviceDetails.setType(Integer.parseInt(data.substring(7,8)));
+
+        String dataNotExtracted = data.substring(9);
+        String dataExtracted="";
+        int length = dataNotExtracted.length();
+        int numberAfterDot = Integer.parseInt(data.substring(8,9));
+        if(numberAfterDot>0){
+            dataExtracted = dataNotExtracted.substring(0,length-numberAfterDot)+"."+dataNotExtracted.substring(length-numberAfterDot,length);
+        }else {
+            dataExtracted = dataNotExtracted;
+        }
+
+        switch (deviceDetails.getType()) {
+            case Constants.BLE_DEVICE_TERMOMETER:
+                dataExtracted += " C";
+                break;
+            case Constants.BLE_DEVICE_BAROMETER:
+                dataExtracted += " hPa";
+                break;
+            case Constants.BLE_DEVICE_AIR:
+                dataExtracted += " %";
+                break;
+        }
+
+
+        deviceDetails.setData(dataExtracted);
+        //TODO tutaj odczytac typ koordynaty
+        return deviceDetails;
+
     }
 
     public static IntentFilter makeGattUpdateIntentFilter() {
@@ -74,9 +112,9 @@ public class BleBroadcastReceiver extends BroadcastReceiver {
         }
     }
 
-    public void changeBleDeviceData(String address, String data){
+    public void changeBleDeviceData(String address, IoTDeviceDetails ioTDeviceDetails){
         if(listener!=null){
-            listener.changeBleDeviceData(address,data);
+            listener.changeBleDeviceData(address,ioTDeviceDetails);
         }
     }
 }

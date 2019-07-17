@@ -112,7 +112,7 @@ public class MainArFragment extends Fragment implements MainArContract.View {
     public void startArView() {
         boolean isPermissionGranted = sharedPreferences.getBoolean(ConfigApp.PERMISSION_KEY, false);
         if (isPermissionGranted) {
-            ((MainActivity) getActivity()).startNewActivity();
+            ((MainActivity) getActivity()).startArActivity();
         } else {
             ((MainActivity) getActivity()).repeatShowPermission();
             this.showMessage(context.getResources().getString(R.string.permission_not_granted));

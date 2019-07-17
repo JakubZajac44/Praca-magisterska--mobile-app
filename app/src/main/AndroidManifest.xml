@@ -34,7 +34,7 @@
 
         </activity>
         <activity
-            android:name=".auth.AuthActivity"
+            android:name=".authManager.AuthActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

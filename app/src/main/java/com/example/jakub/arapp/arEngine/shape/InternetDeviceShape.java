@@ -3,6 +3,7 @@ package com.example.jakub.arapp.arEngine.shape;
 import android.content.Context;
 
 import com.example.jakub.arapp.model.device.InternetDeviceWrapper;
+import com.example.jakub.arapp.utility.Constants;
 import com.google.android.gms.maps.model.LatLng;
 
 import lombok.Getter;
@@ -21,7 +22,7 @@ public class InternetDeviceShape extends IotDeviceShape {
     private String updatetime;
 
     public InternetDeviceShape(InternetDeviceWrapper device,double horizontalAngle,Context context) {
-        super(horizontalAngle, 0, device.getName(),device.getSample(),device.getStatus(),context);
+        super(horizontalAngle, 0, device.getName(),device.getSample(),device.getStatus(),context, Constants.SERVER_DEVICE);
         this.latLng = new LatLng(device.getLat(),device.getLon());
         this.updatetime = device.getUpdatetime();
         this.id = device.getId();

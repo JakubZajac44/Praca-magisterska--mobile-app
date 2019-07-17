@@ -57,6 +57,11 @@ public static final String TAG = InternetDeviceRepositoryImpl.class.getSimpleNam
         internetDeviceDao.remove(internetDevice);
     }
 
+    @Override
+    public void deleteAllDevice() {
+        internetDeviceDao.remobeAll();
+    }
+
     private InternetDevice getDeviceFromWrapper(InternetDeviceWrapper deviceWrapper) {
         InternetDevice internetDevice = new InternetDevice();
         internetDevice.setId(deviceWrapper.getId());

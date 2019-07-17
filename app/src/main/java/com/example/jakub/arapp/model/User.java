@@ -8,6 +8,7 @@ public class User {
     @SerializedName("name")
     @Expose
     private String name;
+
     @SerializedName("password")
     @Expose
     private String password;

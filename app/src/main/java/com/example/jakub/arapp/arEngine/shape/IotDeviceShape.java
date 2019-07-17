@@ -20,8 +20,8 @@ public abstract class IotDeviceShape extends Frame {
     protected int status;
 
 
-    public IotDeviceShape(double horizontalAngle, double pitch, String name, String sample, int status,Context context) {
-        super(context,horizontalAngle, pitch);
+    public IotDeviceShape(double horizontalAngle, double pitch, String name, String sample, int status,Context context, int type) {
+        super(context,horizontalAngle, pitch,type);
         this.horizontalAngle = horizontalAngle;
         this.pitchAngle = pitch;
         this.name = name;

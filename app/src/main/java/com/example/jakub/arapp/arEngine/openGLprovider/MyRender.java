@@ -6,10 +6,11 @@ import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.util.Log;
-import android.widget.Toast;
 
+import com.example.jakub.arapp.arEngine.IotTouchListener;
 import com.example.jakub.arapp.arEngine.shape.BleDeviceShape;
 import com.example.jakub.arapp.arEngine.shape.InternetDeviceShape;
+import com.example.jakub.arapp.model.IoTDeviceDetails;
 import com.example.jakub.arapp.model.device.BleDeviceWrapper;
 import com.example.jakub.arapp.model.device.InternetDeviceWrapper;
 import com.example.jakub.arapp.model.device.IoTDevice;
@@ -29,23 +30,19 @@ public class MyRender implements GLSurfaceView.Renderer {
     private final float[] mMVPMatrix = new float[16];
     private final float[] mProjectionMatrix = new float[16];
     private final float[] mViewMatrix = new float[16];
-
+    private final float eyeX = 0.0f;
+    private final float eyeY = 0.0f;
+    private final float eyeZ = 0.0f;
+    private final float upX = 0.0f;
+    private final float upY = 1.0f;
+    private final float upZ = 0.0f;
+    Context context;
     private float X = 0.0f;
     private float Y = 0.0f;
-
     private List<IoTDevice> ioTDevices;
     private List<BleDeviceShape> bleDeviceShapes;
     private List<InternetDeviceShape> internetDeviceShapes;
-
-    Context context;
-
-    final float eyeX = 0.0f;
-    final float eyeY = 0.0f;
-    final float eyeZ = 0.0f;
-
-    final float upX = 0.0f;
-    final float upY = 1.0f;
-    final float upZ = 0.0f;
+    private IotTouchListener listener;
 
     public MyRender(List<IoTDevice> ioTDevices, Context context) {
         bleDeviceShapes = new ArrayList<>();
@@ -96,14 +93,14 @@ public class MyRender implements GLSurfaceView.Renderer {
 
             }
             Matrix.multiplyMM(scratch, 0, mMVPMatrix, 0, singleFrame.getmModelMatrix(), 0);
-            singleFrame.draw(scratch,gl);
+            singleFrame.draw(scratch, gl);
         }
         for (InternetDeviceShape singleFrame : internetDeviceShapes) {
             if (singleFrame.getStatus() == Constants.CONNECTED_STATUS) {
 
             }
             Matrix.multiplyMM(scratch, 0, mMVPMatrix, 0, singleFrame.getmModelMatrix(), 0);
-            singleFrame.draw(scratch,gl);
+            singleFrame.draw(scratch, gl);
         }
     }
 
@@ -112,7 +109,7 @@ public class MyRender implements GLSurfaceView.Renderer {
             if (device instanceof BleDeviceWrapper) {
                 BleDeviceShape deviceShape = new BleDeviceShape((BleDeviceWrapper) device, context);
 //                deviceShape.setColor(Constants.INVISIBLE_COLOR);
-                deviceShape.setStatusTexture(Constants.UNKNOWN_STATUS);
+                deviceShape.setStatusTexture(Constants.UNKNOWN_STATUS, Constants.BLE_DEVICE);
                 bleDeviceShapes.add(deviceShape);
             } else if (device instanceof InternetDeviceWrapper) {
                 double horizontalAngle = MathOperation.angleFromCoordinate(50.0980585, 19.9731165999, ((InternetDeviceWrapper) device).getLat(), ((InternetDeviceWrapper) device).getLon());
@@ -128,8 +125,7 @@ public class MyRender implements GLSurfaceView.Renderer {
             for (InternetDeviceShape deviceShape : internetDeviceShapes) {
                 if (deviceShape.getId() == deviceWrapper.getId()) {
                     deviceShape.setStatus(Constants.CONNECTED_STATUS);
-//                    deviceShape.setColor(Constants.GREEN_COLOR);
-                    deviceShape.setStatusTexture(Constants.CONNECTED_STATUS);
+                    deviceShape.setStatusTexture(Constants.CONNECTED_STATUS, Constants.SERVER_DEVICE);
                     deviceShape.setUpdatetime(deviceWrapper.getUpdatetime());
                     deviceShape.setSample(deviceWrapper.getSample());
                 }
@@ -140,7 +136,7 @@ public class MyRender implements GLSurfaceView.Renderer {
     public void setAllInternetDeviceOffline() {
         for (InternetDeviceShape device : internetDeviceShapes) {
 //            device.setColor(Constants.RED_COLOR);
-            device.setStatusTexture(Constants.DISCONNECTED_STATUS);
+            device.setStatusTexture(Constants.DISCONNECTED_STATUS, Constants.SERVER_DEVICE);
             device.setStatus(Constants.DISCONNECTED_STATUS);
         }
     }
@@ -150,18 +146,15 @@ public class MyRender implements GLSurfaceView.Renderer {
             if (deviceShape.getAddress().equals(address)) {
                 switch (status) {
                     case Constants.CONNECTED_STATUS:
-//                        deviceShape.setColor(Constants.GREEN_COLOR);
-                        deviceShape.setStatusTexture(Constants.CONNECTED_STATUS);
+                        deviceShape.setStatusTexture(Constants.CONNECTED_STATUS, Constants.BLE_DEVICE);
                         deviceShape.setStatus(Constants.CONNECTED_STATUS);
                         break;
                     case Constants.DISCONNECTED_STATUS:
-//                        deviceShape.setColor(Constants.RED_COLOR);
-                        deviceShape.setStatusTexture(Constants.DISCONNECTED_STATUS);
+                        deviceShape.setStatusTexture(Constants.DISCONNECTED_STATUS, Constants.BLE_DEVICE);
                         deviceShape.setStatus(Constants.DISCONNECTED_STATUS);
                         break;
                     default:
-//                        deviceShape.setColor(Constants.BLUE_COLOR);
-                        deviceShape.setStatusTexture(Constants.UNKNOWN_STATUS);
+                        deviceShape.setStatusTexture(Constants.UNKNOWN_STATUS, Constants.BLE_DEVICE);
                         deviceShape.setStatus(Constants.UNKNOWN_STATUS);
                         break;
                 }
@@ -169,16 +162,16 @@ public class MyRender implements GLSurfaceView.Renderer {
         }
     }
 
-    public void updateBleDeviceData(String address, String sample) {
-        double azimuth = 5f;
-        double pitch = 5f;
-        String samplee = "2";
+    public void updateBleDeviceData(String address, IoTDeviceDetails deviceDetails) {
+        //TODO tutaj zrobić z typem typ
+        double azimuth = deviceDetails.getAzimuth();
+        double pitch = deviceDetails.getPitch();
         for (BleDeviceShape deviceShape : bleDeviceShapes) {
             if (deviceShape.getAddress().equals(address)) {
+                String sample = deviceDetails.getData();
                 deviceShape.setSample(sample);
                 deviceShape.changeCords(azimuth, pitch);
-//                deviceShape.setColor(Constants.GREEN_COLOR);
-                deviceShape.setStatusTexture(Constants.CONNECTED_STATUS);
+                deviceShape.setStatusTexture(Constants.CONNECTED_STATUS, Constants.BLE_DEVICE);
             }
         }
     }
@@ -210,11 +203,12 @@ public class MyRender implements GLSurfaceView.Renderer {
 //        lastShiftY = shift;
     }
 
-    public void check() {
-        float x = 1100f;
-        float y = 540f;
+    public void setUpListener(IotTouchListener listener) {
+        this.listener = listener;
+    }
 
-        this.showCords(x, y);
+    public void removeListener() {
+        this.listener = null;
     }
 
 
@@ -243,7 +237,7 @@ public class MyRender implements GLSurfaceView.Renderer {
             wynik2 = wynik_azimuth * (1100f - x);
 
             if (x <= 550.0f) {
-                wynik2*=1.6;
+                wynik2 *= 1.6;
             }
             nowy_azymt = X - wynik2;
             if (nowy_azymt < 0) nowy_azymt = 360.0f + nowy_azymt;
@@ -251,7 +245,7 @@ public class MyRender implements GLSurfaceView.Renderer {
         } else {
             wynik2 = wynik_azimuth * (x - 1100);
 //            if(x>1650.0f){
-                wynik2*=1.6;
+            wynik2 *= 1.6;
 //            }
 
             nowy_azymt = X + wynik2;
@@ -273,7 +267,7 @@ public class MyRender implements GLSurfaceView.Renderer {
             if (aziumthPlus > nowy_azymt && aziumthMinus < nowy_azymt
                     &&
                     pitchPlus > wynik_pulap && pitchMinus < wynik_pulap) {
-                Toast.makeText(context, deviceShape.getSample(), Toast.LENGTH_SHORT).show();
+                if (listener != null) listener.iotDeviceTouched(deviceShape);
             }
         }
 
@@ -287,8 +281,11 @@ public class MyRender implements GLSurfaceView.Renderer {
             if (aziumthPlus > nowy_azymt && aziumthMinus < nowy_azymt
                     &&
                     pitchPlus > wynik_pulap && pitchMinus < wynik_pulap) {
-                Toast.makeText(context, String.valueOf(deviceShape.getSample() + " " + deviceShape.getName()
-                        + " " + MathOperation.numberToStringRound(deviceShape.getDistance(), 2)), Toast.LENGTH_SHORT).show();
+                if (listener != null) listener.iotDeviceTouched(deviceShape);
+//                Toast.makeText(context, String.valueOf(deviceShape.getSample() + " " + deviceShape.getName()
+//                        + " " + MathOperation.numberToStringRound(deviceShape.getDistance(), 2)), Toast.LENGTH_SHORT).show();
+//                ActivityManager manager = (ActivityManager)context.getSystemService(Context.ACTIVITY_SERVICE);
+
             }
         }
 

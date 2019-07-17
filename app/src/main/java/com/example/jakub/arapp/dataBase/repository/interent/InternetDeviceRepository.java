@@ -19,5 +19,7 @@ public interface InternetDeviceRepository {
 
     void deleteDevice(InternetDeviceWrapper device);
 
+    void deleteAllDevice();
+
     List<InternetDeviceWrapper> wrapListInternetDevice(List<InternetDevice> devices);
 }

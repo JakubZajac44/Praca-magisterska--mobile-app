@@ -77,16 +77,35 @@ public class MapPresenter implements MapContract.Presenter, GpsLocationListener,
                 internetDeviceToSave.add(device);
             }
         }
-        if(!internetDeviceToSave.isEmpty())this.saveInternetDeviceToDb();
+       this.saveInternetDeviceToDb();
     }
 
     private void saveInternetDeviceToDb() {
         logger.log(TAG,"Saved to scenario, size: "+String.valueOf(internetDeviceToSave.size()));
+        this.removeAllInternetDevice(internetDeviceToSave);
+    }
 
-        for(int i =0;i<internetDeviceToSave.size();i++){
-            logger.log(TAG,internetDeviceToSave.get(i).toString());
-        }
+    private void removeAllInternetDevice(List<InternetDeviceWrapper> internetDeviceToSave) {
+        Completable.fromAction(()-> internetRepository.deleteAllDevice()).observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io()).subscribe(new CompletableObserver() {
+            @Override
+            public void onSubscribe(Disposable d) {
 
+            }
+
+            @Override
+            public void onComplete() {
+                if(!internetDeviceToSave.isEmpty())saveNewInternetDevice(internetDeviceToSave);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                view.showMessage(context.getString(R.string.api_error));
+            }
+        });
+    }
+
+    private void saveNewInternetDevice(List<InternetDeviceWrapper> internetDeviceToSave) {
         Completable.fromAction(() -> internetRepository.insertInternetDevices(internetDeviceToSave)).observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io()).subscribe(new CompletableObserver() {
             @Override
@@ -95,8 +114,8 @@ public class MapPresenter implements MapContract.Presenter, GpsLocationListener,
 
             @Override
             public void onComplete() {
-                view.showMessage("Dodano poprawnie, " + internetDeviceToSave.size() + " rekordów");
-                }
+                view.showMessage("Zapisano poprawnie, " + internetDeviceToSave.size() + " urządzeń");
+            }
 
             @Override
             public void onError(Throwable e) {
@@ -105,6 +124,7 @@ public class MapPresenter implements MapContract.Presenter, GpsLocationListener,
             }
         });
     }
+
 
     private boolean shouldBeSaved(InternetDeviceWrapper device, int currentRadius, Location currentCircleLocation) {
         Location deviceLocation = MathOperation.getLocation(device.getLat(),device.getLon());

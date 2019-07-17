@@ -47,4 +47,13 @@ public class Constants {
 
     public static final String USER_CREDENTIALS_KEY = "USER_CREDENTIALS";
 
+    public static final int BLE_DEVICE = 0;
+    public static final int SERVER_DEVICE = 1;
+
+
+    public static final int BLE_DEVICE_TERMOMETER = 2;
+    public static final int BLE_DEVICE_BAROMETER = 1;
+    public static final int BLE_DEVICE_OTHER = 3;
+    public static final int BLE_DEVICE_AIR = 4;
+
 }

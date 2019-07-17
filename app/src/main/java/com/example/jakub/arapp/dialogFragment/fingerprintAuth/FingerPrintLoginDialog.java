@@ -41,6 +41,7 @@ public class FingerPrintLoginDialog extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ((MyApplication) getActivity().getApplication()).getAppComponent().inject(this);
+        setStyle(DialogFragment.STYLE_NO_FRAME,0);
     }
 
     @Override
@@ -64,9 +65,10 @@ public class FingerPrintLoginDialog extends DialogFragment {
     }
 
     private void setDialogProperties() {
-        ViewGroup.LayoutParams params = getDialog().getWindow().getAttributes();
-        params.width = WindowManager.LayoutParams.MATCH_PARENT;
-        getDialog().getWindow().setAttributes((WindowManager.LayoutParams) params);
+        WindowManager.LayoutParams params = getDialog().getWindow().getAttributes();
+        params.dimAmount = 0.8f;
+        getDialog().getWindow().setAttributes(params);
+        getDialog().getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
     }
 
     public void setPresenter(AuthContract.Presenter presenter) {
@@ -76,14 +78,9 @@ public class FingerPrintLoginDialog extends DialogFragment {
     public void changeAuthStatus(boolean status) {
         isAuth = status;
         if (isAuth) {
-            fingerprintImageView.setImageResource(R.drawable.finger_pring_green);
+            fingerprintImageView.setImageResource(R.drawable.correct_finger_print);
             final Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    close();
-                }
-            }, 1000);
+            handler.postDelayed(() -> close(), 1000);
         } else {
             fingerprintImageView.setImageResource(R.drawable.finger_pring_red);
         }

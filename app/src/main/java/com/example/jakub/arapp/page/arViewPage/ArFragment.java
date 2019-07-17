@@ -47,28 +47,73 @@ public class ArFragment extends Fragment implements ArContract.View {
     public static final String TAG = ArFragment.class.getSimpleName();
     @Inject
     public ArContract.Presenter presenter;
-
-    private Unbinder unbinder;
-
+    protected CameraDevice cameraDevice;
+    protected CaptureRequest.Builder captureRequestBuilder;
+    protected CameraCaptureSession cameraCaptureSessions;
     @BindView(R.id.azimuthTextView)
     TextView azimuthTextView;
-
     @BindView(R.id.pitchTextView)
     TextView pitchTextView;
-
+    @BindView(R.id.nameTextView)
+    TextView nameTextView;
+    @BindView(R.id.sampleTextView)
+    TextView sampleTextView;
+    @BindView(R.id.distanceTextView)
+    TextView distanceTextView;
     @BindView(R.id.cameraView)
     TextureView mCameraView;
-
     @Inject
     Context context;
+    private Unbinder unbinder;
+    private String cameraId;
+    private Size imageDimension;
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    TextureView.SurfaceTextureListener textureListener = new TextureView.SurfaceTextureListener() {
+        @Override
+        public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
+            openCamera(width, height);
+        }
 
+        @Override
+        public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
+            // Transform you image captured size according to the surface width and height
+        }
+
+        @Override
+        public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
+            return false;
+        }
+
+        @Override
+        public void onSurfaceTextureUpdated(SurfaceTexture surface) {
+        }
+    };
+    private Handler mBackgroundHandler;
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    private final CameraDevice.StateCallback stateCallback = new CameraDevice.StateCallback() {
+        @Override
+        public void onOpened(CameraDevice camera) {
+            cameraDevice = camera;
+            createCameraPreview();
+        }
+
+        @Override
+        public void onDisconnected(CameraDevice camera) {
+            cameraDevice.close();
+        }
+
+        @Override
+        public void onError(CameraDevice camera, int error) {
+            cameraDevice.close();
+            cameraDevice = null;
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ((MyApplication) getActivity().getApplication()).getAppComponent().inject(this);
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -94,37 +139,9 @@ public class ArFragment extends Fragment implements ArContract.View {
         super.onDestroy();
     }
 
-    private String cameraId;
-    private Size imageDimension;
-    protected CameraDevice cameraDevice;
-    private Handler mBackgroundHandler;
-
-    protected CaptureRequest.Builder captureRequestBuilder;
-    protected CameraCaptureSession cameraCaptureSessions;
-
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    TextureView.SurfaceTextureListener textureListener = new TextureView.SurfaceTextureListener() {
-        @Override
-        public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
-            openCamera(width,height);
-        }
-        @Override
-        public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
-            // Transform you image captured size according to the surface width and height
-        }
-        @Override
-        public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
-            return false;
-        }
-        @Override
-        public void onSurfaceTextureUpdated(SurfaceTexture surface) {
-        }
-    };
-
-
     @SuppressLint("MissingPermission")
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    private void openCamera(int width,int height) {
+    private void openCamera(int width, int height) {
         CameraManager manager = (CameraManager) context.getSystemService(Context.CAMERA_SERVICE);
 
         try {
@@ -138,32 +155,13 @@ public class ArFragment extends Fragment implements ArContract.View {
 //                ActivityCompat.requestPermissions(ArActivity.this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CAMERA_PERMISSION);
 //                return;
 //            }
-            configureTransform(width,height);
+            configureTransform(width, height);
             manager.openCamera(cameraId, stateCallback, null);
         } catch (CameraAccessException e) {
             e.printStackTrace();
         }
 
     }
-
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    private final CameraDevice.StateCallback stateCallback = new CameraDevice.StateCallback() {
-        @Override
-        public void onOpened(CameraDevice camera) {
-            cameraDevice = camera;
-            createCameraPreview();
-        }
-
-        @Override
-        public void onDisconnected(CameraDevice camera) {
-            cameraDevice.close();
-        }
-        @Override
-        public void onError(CameraDevice camera, int error) {
-            cameraDevice.close();
-            cameraDevice = null;
-        }
-    };
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     protected void createCameraPreview() {
@@ -175,7 +173,7 @@ public class ArFragment extends Fragment implements ArContract.View {
             Surface surface = new Surface(texture);
             captureRequestBuilder = cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW);
             captureRequestBuilder.addTarget(surface);
-            cameraDevice.createCaptureSession(Arrays.asList(surface), new CameraCaptureSession.StateCallback(){
+            cameraDevice.createCaptureSession(Arrays.asList(surface), new CameraCaptureSession.StateCallback() {
                 @Override
                 public void onConfigured(@NonNull CameraCaptureSession cameraCaptureSession) {
                     //The camera is already closed
@@ -186,6 +184,7 @@ public class ArFragment extends Fragment implements ArContract.View {
                     cameraCaptureSessions = cameraCaptureSession;
                     updatePreview();
                 }
+
                 @Override
                 public void onConfigureFailed(@NonNull CameraCaptureSession cameraCaptureSession) {
 
@@ -197,9 +196,9 @@ public class ArFragment extends Fragment implements ArContract.View {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    protected void updatePreview(){
+    protected void updatePreview() {
 
-        if(null == cameraDevice) {
+        if (null == cameraDevice) {
 
         }
         captureRequestBuilder.set(CaptureRequest.CONTROL_MODE, CameraMetadata.CONTROL_MODE_AUTO);
@@ -223,7 +222,7 @@ public class ArFragment extends Fragment implements ArContract.View {
     private void configureTransform(int viewWidth, int viewHeight) {
         Activity activity = getActivity();
         int rotation = activity.getWindowManager().getDefaultDisplay().getRotation();
-        Log.i(TAG,String.valueOf(rotation));
+        Log.i(TAG, String.valueOf(rotation));
         if (null == mCameraView || null == imageDimension || null == activity) {
             return;
         }
@@ -234,7 +233,7 @@ public class ArFragment extends Fragment implements ArContract.View {
         float centerX = viewRect.centerX();
         float centerY = viewRect.centerY();
 
-        if (Surface.ROTATION_90 == rotation || Surface.ROTATION_270== rotation) {
+        if (Surface.ROTATION_90 == rotation || Surface.ROTATION_270 == rotation) {
             bufferRect.offset(centerX - bufferRect.centerX(), centerY - bufferRect.centerY());
             matrix.setRectToRect(viewRect, bufferRect, Matrix.ScaleToFit.FILL);
             float scale = Math.max(
@@ -253,7 +252,15 @@ public class ArFragment extends Fragment implements ArContract.View {
     public void orientationChangedText(Orientation3d newOrientation) {
         float azimuthDegrees = newOrientation.getAzimuthDegrees();
         float pitchDegrees = newOrientation.getPitchDegrees();
-        azimuthTextView.setText(MathOperation.numberToStringRound(azimuthDegrees,2));
-        pitchTextView.setText(MathOperation.numberToStringRound(360-pitchDegrees,2));
+        azimuthTextView.setText(MathOperation.numberToStringRound(azimuthDegrees, 2));
+        pitchTextView.setText(MathOperation.numberToStringRound(360 - pitchDegrees, 2));
     }
+
+    @Override
+    public void detailChangedText(String name, String sample, String distance) {
+        nameTextView.setText(name);
+        sampleTextView.setText(sample);
+        distanceTextView.setText(distance+" km");
+    }
+
 }

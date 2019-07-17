@@ -92,16 +92,16 @@ public class ListViewBleDeviceStatusAdapter extends BaseAdapter {
         viewHolder.getItemStatusImageView().setImageDrawable(icon);
 
         String name = "";
-        String sample = ctx.getString(R.string.sample_text)+": ";
-        if(listViewIotDeviceItem instanceof BleDeviceWrapper){
+        String sample = ctx.getString(R.string.sample_text) + ": ";
+        if (listViewIotDeviceItem instanceof BleDeviceWrapper) {
             BleDeviceWrapper bleDeviceWrapper = (BleDeviceWrapper) listViewIotDeviceItem;
             name = bleDeviceWrapper.getName();
             sample += bleDeviceWrapper.getSample();
 
-        }else if(listViewIotDeviceItem instanceof InternetDeviceWrapper){
-            InternetDeviceWrapper internetDeviceWrapper = (InternetDeviceWrapper)listViewIotDeviceItem;
-            name = internetDeviceWrapper.getName() +", id: "+ internetDeviceWrapper.getId();
-            sample += internetDeviceWrapper.getSample()+", " + ctx.getString(R.string.time_sample_text)+": "+internetDeviceWrapper.getUpdatetime();
+        } else if (listViewIotDeviceItem instanceof InternetDeviceWrapper) {
+            InternetDeviceWrapper internetDeviceWrapper = (InternetDeviceWrapper) listViewIotDeviceItem;
+            name = internetDeviceWrapper.getName() + ", id: " + internetDeviceWrapper.getId();
+            sample += internetDeviceWrapper.getSample() + ", " + ctx.getString(R.string.time_sample_text) + ": " + internetDeviceWrapper.getUpdatetime();
         }
         viewHolder.getItemSubTextView().setText(sample);
         viewHolder.getItemNameTextView().setText(name);

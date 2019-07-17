@@ -6,14 +6,16 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.jakub.arapp.MyApplication;
 import com.example.jakub.arapp.R;
-import com.example.jakub.arapp.auth.AuthActivity;
+import com.example.jakub.arapp.authManager.AuthActivity;
 import com.example.jakub.arapp.dialogFragment.PinDialog;
 import com.example.jakub.arapp.dialogFragment.fingerprintAuth.FingerPrintPermissionDialog;
 import com.example.jakub.arapp.utility.Constants;
@@ -51,6 +53,8 @@ public class AuthRegisterFragment extends Fragment implements AuthContract.Regis
     EditText userNameText;
     @BindView(R.id.userPasswordText)
     EditText userPasswordText;
+    @BindView(R.id.reloginButtonLayout)
+    LinearLayout reloginButtonLayout;
     private Unbinder unbinder;
     private boolean isSignIn;
 
@@ -68,18 +72,15 @@ public class AuthRegisterFragment extends Fragment implements AuthContract.Regis
         View view = inflater.inflate(R.layout.auth_registration_fragment, container, false);
         presenter.attachView(this);
         unbinder = ButterKnife.bind(this, view);
+        reloginButtonLayout.setOnTouchListener((v, event) -> {
+            reLoginUser();
+            return false;
+        });
         return view;
     }
 
-    @OnClick(R.id.reloginButton)
     public void reLoginUser() {
         ((AuthActivity) getActivity()).showReLoginFragment();
-    }
-
-    @OnClick(R.id.notLoginButton)
-    public void runWithoutLogin() {
-        setRunningStatus(true);
-        startMainActivity();
     }
 
 

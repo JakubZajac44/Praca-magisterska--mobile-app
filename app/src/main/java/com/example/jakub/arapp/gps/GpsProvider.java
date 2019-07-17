@@ -18,7 +18,7 @@ public interface GpsProvider {
     void removeGpsListener();
 
 
-    @Module()
+     @Module()
      abstract class GpsProviderModule {
 
           @Binds

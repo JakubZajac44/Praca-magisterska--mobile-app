@@ -14,13 +14,13 @@ import android.widget.Toast;
 
 import com.example.jakub.arapp.application.ConfigApp;
 import com.example.jakub.arapp.arEngine.ArActivity;
-import com.example.jakub.arapp.auth.AuthActivity;
+import com.example.jakub.arapp.authManager.AuthActivity;
 import com.example.jakub.arapp.broadcastReceiver.bluetooth.BleBroadcastReceiver;
 import com.example.jakub.arapp.broadcastReceiver.gps.GpsBroadcastReceiver;
 import com.example.jakub.arapp.broadcastReceiver.internet.InternetBroadcastReceiver;
 import com.example.jakub.arapp.dataBase.repository.ble.BleDeviceRepository;
-import com.example.jakub.arapp.page.bluetoothDeviceListPage.BluetoothContract;
-import com.example.jakub.arapp.page.bluetoothDeviceListPage.BluetoothFragment;
+import com.example.jakub.arapp.page.bluetoothScannerPage.BluetoothScannerContract;
+import com.example.jakub.arapp.page.bluetoothScannerPage.BluetoothScannerFragment;
 import com.example.jakub.arapp.page.mainArPage.MainArContract;
 import com.example.jakub.arapp.page.mainArPage.MainArFragment;
 import com.example.jakub.arapp.page.mapPage.MapContract;
@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean doubleBackToExitPressedOnce = false;
     private boolean isRunningWithoutLogin = false;
     private String currentFragmentTAG = "";
-    private BluetoothContract.View bluetoothDeviceListFragment;
+    private BluetoothScannerContract.View bluetoothDeviceListFragment;
     private MainArContract.View mainArFragment;
     private MapContract.View mapFragment;
     private SettingsContract.View settingsFragment;
@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
     };
 
     public MainActivity() {
-        bluetoothDeviceListFragment = new BluetoothFragment();
+        bluetoothDeviceListFragment = new BluetoothScannerFragment();
         mainArFragment = new MainArFragment();
         mapFragment = new MapFragment();
         settingsFragment = new SettingsFragment();
@@ -146,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
 
                     case R.id.ble_navigation:
                         nextFragment = (Fragment) bluetoothDeviceListFragment;
-                        tag = BluetoothFragment.TAG;
+                        tag = BluetoothScannerFragment.TAG;
                         break;
                     case R.id.settings_navigation:
                             nextFragment = (Fragment) settingsFragment;
@@ -233,7 +233,7 @@ public class MainActivity extends AppCompatActivity {
         ft.commit();
     }
 
-    public void startNewActivity() {
+    public void startArActivity() {
         Intent myIntent = new Intent(MainActivity.this, ArActivity.class);
         MainActivity.this.startActivity(myIntent);
     }

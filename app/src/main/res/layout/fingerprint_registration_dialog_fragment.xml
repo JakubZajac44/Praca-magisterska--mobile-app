@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_width="400dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:background="@drawable/dialog_curved">
 
 
     <TextView
@@ -14,8 +16,10 @@
         android:layout_alignParentTop="true"
         android:layout_marginTop="10dp"
         android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="20sp"
         android:padding="10dp"
-        android:text="Czy chcesz logowac sie przy pomocy odcisku palca?" />
+        android:text="@string/finger_print_auth_permission" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -26,24 +30,30 @@
         android:padding="20dp"
         android:weightSum="2">
 
-        <Button
+        <com.google.android.material.button.MaterialButton
 
             android:id="@+id/fingerprintAuthNoButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/no_text" />
+            android:text="@string/no_text"
+            android:textColor="@color/blue_text"
+            android:theme="@style/MyButtonStyleWhite"
+            app:cornerRadius="15dp"/>
 
         <Space
             android:layout_width="20dp"
             android:layout_height="wrap_content" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/fingerprintAuthYesButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/yes_text" />
+            android:text="@string/yes_text"
+            android:textColor="@color/blue_text"
+            android:theme="@style/MyButtonStyleWhite"
+            app:cornerRadius="15dp"/>
 
     </LinearLayout>
 

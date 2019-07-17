@@ -6,7 +6,7 @@ import android.os.Handler;
 import android.os.Message;
 
 import com.example.jakub.arapp.R;
-import com.example.jakub.arapp.bluetooth.connectionManager.ConnectedBleDeviceProvider;
+import com.example.jakub.arapp.bluetoothManager.connectionManager.ConnectedBleDeviceProvider;
 import com.example.jakub.arapp.broadcastReceiver.bluetooth.BleBroadcastReceiver;
 import com.example.jakub.arapp.broadcastReceiver.bluetooth.BleConnectionListener;
 import com.example.jakub.arapp.broadcastReceiver.internet.InternetBroadcastReceiver;
@@ -15,6 +15,7 @@ import com.example.jakub.arapp.dataBase.data.ble.BleDevice;
 import com.example.jakub.arapp.dataBase.data.internet.InternetDevice;
 import com.example.jakub.arapp.dataBase.repository.ble.BleDeviceRepository;
 import com.example.jakub.arapp.dataBase.repository.interent.InternetDeviceRepository;
+import com.example.jakub.arapp.model.IoTDeviceDetails;
 import com.example.jakub.arapp.model.ScenarioAr;
 import com.example.jakub.arapp.model.device.BleDeviceWrapper;
 import com.example.jakub.arapp.model.device.InternetDeviceWrapper;
@@ -242,11 +243,12 @@ public class MainArPresenter implements MainArContract.Presenter, BleConnectionL
     }
 
     @Override
-    public void changeBleDeviceData(String address, String data) {
+    public void changeBleDeviceData(String address, IoTDeviceDetails deviceDetails) {
         for (IoTDevice ioTDevice : ioTDeviceList) {
             if (ioTDevice instanceof BleDeviceWrapper) {
                 if (((BleDeviceWrapper) ioTDevice).getAddress().equals(address))
-                    ioTDevice.setSample(data);
+                    ioTDevice.setSample(deviceDetails.getData());
+                    ((BleDeviceWrapper) ioTDevice).setType(deviceDetails.getType());
             }
         }
         view.notifyDataChanged();
