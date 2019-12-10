@@ -39,3 +39,11 @@ Diagramy aktywności:
 <img src="https://user-images.githubusercontent.com/34090166/70507977-c45b0880-1b2d-11ea-901f-034d07ccc504.jpg" width="600">
 
 Aplikacja mobilna korzysta z wzorca programowania reaktywnego: RxJava, podczas wykonywania operacji na obiektowej bazy danych, autoryzacji użytkownia oraz nawiązywaniu połączenia z urządzeniami IoT Bluetooth. Wykorzystany został również Dagger 2 do wstrzykiwania zależności między komponentami.
+
+W celu wyświetlania widoku AR zbudowana została scena w OpenGL, a następnie nałożony został na nią widok z kamery. W celu określenia położenia w przestrzeni wykorzystan został fuzja czujników: żyroskop, akcelerometr oraz czujnik magnetyczny. 
+
+Link do filmiku obrazującego działanie aplikacji:
+
+https://www.youtube.com/watch?v=vPt4YS6j7Nw&list=PLVLDfQrBl6KjVxy1UFPc_prghKsUCQtxm
+
+Działanie aplikacji
