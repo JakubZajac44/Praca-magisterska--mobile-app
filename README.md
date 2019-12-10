@@ -17,4 +17,7 @@ Widoki Aplikacji globAR
 <img src="https://user-images.githubusercontent.com/34090166/70507298-59f59880-1b2c-11ea-8c2f-e87011b27ac6.jpg" width="600">
 <img src="https://user-images.githubusercontent.com/34090166/70507337-6b3ea500-1b2c-11ea-938e-26c136408f35.jpg" width="600">
 
+W czasie projektowania aplikacji wykorzystany został wzorzec MVP, który tuż obok MVVM jest rekomendowanym wzorem projektowania na platformę android. Poniższe diagramy obrazują architekturę systemu: 
+
+
 
