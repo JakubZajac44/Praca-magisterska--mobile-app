@@ -12,5 +12,7 @@ Ostatnim, ale najważniejszym elementem aplikacji jest widok Rozszerzonej Rzeczy
 
 Widoki Aplikacji globAR
 
-<img src="https://user-images.githubusercontent.com/34090166/70506236-19951b00-1b2a-11ea-8dbc-5c0f028e5038.jpg" width="200">
+<img src="https://user-images.githubusercontent.com/34090166/70507371-7bef1b00-1b2c-11ea-9f1d-c3f0b47462ef.jpg" width="200">
+
+<img src="https://user-images.githubusercontent.com/34090166/70507057-e3f13180-1b2b-11ea-965c-3ebd1f71e076.jpg" width="200">
 
