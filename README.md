@@ -45,5 +45,3 @@ W celu wyświetlania widoku AR zbudowana została scena w OpenGL, a następnie n
 Link do filmiku obrazującego działanie aplikacji:
 
 https://www.youtube.com/watch?v=vPt4YS6j7Nw&list=PLVLDfQrBl6KjVxy1UFPc_prghKsUCQtxm
-
-Działanie aplikacji
