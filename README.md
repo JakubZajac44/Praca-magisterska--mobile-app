@@ -11,3 +11,6 @@ Użytkownik do swojej dyspozycji ma widok skaneru urządzeń IoT Bluetooth oraz 
 Ostatnim, ale najważniejszym elementem aplikacji jest widok Rozszerzonej Rzeczywistości. Wszystkie wybrane urządzenia wyświetlane są poprzez widok z kamery. Zbudowana scena 3d pozwala na umieszczenie symobli reprezentujących stan urządzeń IoT. Po naciśnięciu na dane urządzenia wyświetlane zostają dane pochodzące z nich. 
 
 Widoki Aplikacji globAR
+
+<img src="https://user-images.githubusercontent.com/34090166/70506236-19951b00-1b2a-11ea-8dbc-5c0f028e5038.jpg" width="200">
+
