@@ -20,4 +20,22 @@ Widoki Aplikacji globAR
 W czasie projektowania aplikacji wykorzystany został wzorzec MVP, który tuż obok MVVM jest rekomendowanym wzorem projektowania na platformę android. Poniższe diagramy obrazują architekturę systemu: 
 
 
+Diagram komponentów:
 
+<img src="https://user-images.githubusercontent.com/34090166/70507935-ac838480-1b2d-11ea-8e80-48a8e32dead2.jpg" width="600">
+
+Diagram wdrożenia:
+
+<img src="https://user-images.githubusercontent.com/34090166/70507947-b1483880-1b2d-11ea-9059-33e5f14c9899.jpg" width="600">
+
+Diagram przypadków użycia:
+
+<img src="https://user-images.githubusercontent.com/34090166/70507960-b86f4680-1b2d-11ea-8de6-258a072ef9e8.jpg" width="600">
+
+Diagramy aktywności:
+
+<img src="https://user-images.githubusercontent.com/34090166/70507969-befdbe00-1b2d-11ea-93a0-fd2ed45eb969.jpg" width="600">
+<img src="https://user-images.githubusercontent.com/34090166/70507965-b9a07380-1b2d-11ea-8df4-c36c39ac9218.jpg" width="600">
+<img src="https://user-images.githubusercontent.com/34090166/70507977-c45b0880-1b2d-11ea-901f-034d07ccc504.jpg" width="600">
+
+Aplikacja mobilna korzysta z wzorca programowania reaktywnego: RxJava, podczas wykonywania operacji na obiektowej bazy danych, autoryzacji użytkownia oraz nawiązywaniu połączenia z urządzeniami IoT Bluetooth. Wykorzystany został również Dagger 2 do wstrzykiwania zależności między komponentami.
